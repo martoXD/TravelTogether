@@ -40,6 +40,8 @@ namespace TravelTogether
                 identityOptions.Password.RequireUppercase = false;
                 identityOptions.Password.RequireNonAlphanumeric = false;
                 identityOptions.Password.RequiredUniqueChars = 0;
+                identityOptions.SignIn.RequireConfirmedEmail = false;
+                identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();

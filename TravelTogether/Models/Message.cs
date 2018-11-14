@@ -20,9 +20,9 @@ namespace TravelTogether.Models
         public MessageStatus MessageStatus { get; set; }
 
         public int SenderId { get; set; }
-        public User Sender { get; set; }
+        public virtual TtUser Sender { get; set; }
 
         public int ReceiverId { get; set; }
-        public User Receiver { get; set; }
+        public virtual TtUser Receiver { get; set; }
     }
 }

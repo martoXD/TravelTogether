@@ -18,13 +18,14 @@ namespace TravelTogether.Models
 
         [StringLength(100)]
         public string Caption { get; set; }
-        
-        public byte[] Image { get; set; }
 
         public int Likes { get; set; }
 
         public int UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual TtUser User { get; set; }
+
+        public int ImageId { get; set; }
+        public virtual Image Image { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
     }

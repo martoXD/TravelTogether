@@ -17,6 +17,9 @@ namespace TravelTogether.Models
         public virtual Trip Trip { get; set; }
 
         public int? UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual TtUser User { get; set; }
+
+        public int? PostId { get; set; }
+        public virtual Post Post { get; set; }
     }
 }

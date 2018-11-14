@@ -11,7 +11,7 @@ namespace TravelTogether.Models
         public Trip()
         {
             this.Images = new HashSet<Image>();
-            this.SignedUsers = new HashSet<User>();
+            this.SignedUsers = new HashSet<TripUser>();
         }
 
         [Key]
@@ -23,6 +23,6 @@ namespace TravelTogether.Models
 
         public virtual ICollection<Image> Images { get; set; }
 
-        public virtual ICollection<User> SignedUsers { get; set; }
+        public virtual ICollection<TripUser> SignedUsers { get; set; }
     }
 }
