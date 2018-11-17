@@ -17,13 +17,12 @@ namespace TravelTogether.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripUser> TripUsers { get; set; }
-        public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<FriendShip> FriendShips { get; set; }
+        public DbSet<TtUser> AspNetUsers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            this.Roles.Add(new IdentityRole("Admin"));
-            this.Roles.Add(new IdentityRole("User"));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,6 +32,7 @@ namespace TravelTogether.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TtUser>().HasKey(p => p.Id);
             modelBuilder.ApplyConfiguration(new CommentConfig());
             modelBuilder.ApplyConfiguration(new ImageConfig());
             modelBuilder.ApplyConfiguration(new MessageConfig());
@@ -41,6 +41,7 @@ namespace TravelTogether.Data
             modelBuilder.ApplyConfiguration(new TripUserConfig());
             modelBuilder.ApplyConfiguration(new TtUserConfig());
             modelBuilder.ApplyConfiguration(new UserFriendConfig());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

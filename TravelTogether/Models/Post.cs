@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,9 +22,11 @@ namespace TravelTogether.Models
 
         public int Likes { get; set; }
 
-        public int UserId { get; set; }
-        public virtual TtUser User { get; set; }
+        [ForeignKey("TtUser")]
+        public string TtUserId { get; set; }
+        public virtual TtUser TtUser { get; set; }
 
+        [ForeignKey("Image")]
         public int ImageId { get; set; }
         public virtual Image Image { get; set; }
 

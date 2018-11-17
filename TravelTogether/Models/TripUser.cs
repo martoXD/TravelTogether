@@ -7,8 +7,8 @@ namespace TravelTogether.Models
 {
     public class TripUser
     {
-        public int UserId { get; set; }
-        public virtual TtUser User { get; set; }
+        public string TtUserId { get; set; }
+        public virtual TtUser TtUser { get; set; }
 
         public int TripId { get; set; }
         public virtual Trip Trip { get; set; }

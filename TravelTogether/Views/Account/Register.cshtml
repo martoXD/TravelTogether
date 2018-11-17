@@ -5,39 +5,59 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Register</h2>
+@section Links{
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-default" />
-            </div>
-        </form>
+}
+
+<div class="owl">
+    <div class="hand"></div>
+    <div class="hand hand-r"></div>
+    <div class="arms">
+        <div class="arm"></div>
+        <div class="arm arm-r"></div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form method="post" action="/Account/Register">
+    <div class="register-form">
+        <div class="control">
+            <label for="username"></label>
+            <input id="username" placeholder="Username" name="Username" type="text" />           
+        </div>
+        <div class="control">
+            <label for="password"></label>
+            <input id="password" placeholder="Password" name="Password" type="password" />
+        </div>
+        <div class="control">
+            <label for="confirmPassword"></label>
+            <input id="confirmPassword" placeholder="Confirm Password" name="ConfirmPassword" type="password" />
+        </div>
+        <div class="control">
+            <label for="firstName"></label>
+            <input id="firstName" placeholder="First Name" name="FirstName" type="text" />
+        </div>
+        <div class="control">
+            <label for="lastName"></label>
+            <input id="lastName" placeholder="Last Name" name="LastName" type="text" />
+        </div>
+        <div class="control">
+            <label for="country"></label>
+            <input id="country" placeholder="Country" name="Country" type="text" />
+        </div>
+        <div class="control">
+            <label for="city"></label>
+            <input id="city" placeholder="City" name="City" type="text" />
+        </div>
+        <div class="control">
+            <span class="ui grey inverted header">Male : </span>@Html.RadioButtonFor(m => m.Gender, "Male", new { id="Gender1"})
+            <span class="ui grey inverted header">Female : </span>@Html.RadioButtonFor(m => m.Gender, "Female", new { id = "Gender2" })
+        </div>
+        <div class="control">
+            <button type="submit" class="ui secondary button">Register</button>
+        </div>
+    </div>  
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 }

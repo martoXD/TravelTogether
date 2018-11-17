@@ -2,11 +2,15 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using TravelTogether.Data;
+using TravelTogether.Models;
+using TravelTogether.Utilities;
 
 namespace TravelTogether
 {
@@ -28,12 +32,19 @@ namespace TravelTogether
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Account/AccessDenied";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(identityOptions =>
+            services.AddIdentity<IdentityUser, IdentityRole>(identityOptions =>
             {
                 identityOptions.Password.RequireDigit = false;
                 identityOptions.Password.RequireLowercase = false;
@@ -44,13 +55,19 @@ namespace TravelTogether
                 identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultUI()
+            .AddDefaultTokenProviders()
+            .AddUserManager<UserManager<TtUser>>();
+
+            //services.AddScoped<IUserStore<TtUser>, UserStore<TtUser>>();
+            //services.AddSingleton<UserManager<TtUser>>();
+            //services.AddSingleton<SignInManager<TtUser>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -62,6 +79,7 @@ namespace TravelTogether
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            Seeder.Seed(serviceProvider);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
