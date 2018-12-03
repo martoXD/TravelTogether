@@ -9,7 +9,7 @@ using TravelTogether.Models;
 
 namespace TravelTogether.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<TtUser>
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -18,7 +18,6 @@ namespace TravelTogether.Data
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripUser> TripUsers { get; set; }
         public DbSet<FriendShip> FriendShips { get; set; }
-        public DbSet<TtUser> AspNetUsers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -32,7 +31,6 @@ namespace TravelTogether.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TtUser>().HasKey(p => p.Id);
             modelBuilder.ApplyConfiguration(new CommentConfig());
             modelBuilder.ApplyConfiguration(new ImageConfig());
             modelBuilder.ApplyConfiguration(new MessageConfig());

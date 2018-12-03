@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "87038d19eb93e9bd29674bcc9a16b2c073507599"
+    "signature": "7e9b11a6b66e8d63b446d7097c52742e400cf6ca"
   },
   "compilationOptions": {
     "defines": [
@@ -30,7 +30,8 @@
           "Microsoft.EntityFrameworkCore.Proxies": "2.1.4",
           "Microsoft.EntityFrameworkCore.Tools": "2.1.4",
           "Microsoft.NETCore.App": "2.1.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.6"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.6",
+          "Semantic-UI-2.0": "2.1.0"
         },
         "runtime": {
           "TravelTogether.dll": {}
@@ -62,6 +63,7 @@
           "lib/netstandard1.3/Castle.Core.dll": {}
         }
       },
+      "jQuery/1.8.1": {},
       "Microsoft.AspNetCore.Razor.Design/2.1.2": {},
       "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
         "dependencies": {
@@ -508,6 +510,11 @@
         },
         "compile": {
           "lib/netstandard1.0/Remotion.Linq.dll": {}
+        }
+      },
+      "Semantic-UI-2.0/2.1.0": {
+        "dependencies": {
+          "jQuery": "1.8.1"
         }
       },
       "System.Collections.Immutable/1.5.0": {},
@@ -3595,6 +3602,13 @@
       "path": "castle.core/4.2.1",
       "hashPath": "castle.core.4.2.1.nupkg.sha512"
     },
+    "jQuery/1.8.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/iZJTYHkT7ZO0Bqk/2xwnbj2wFE6IkqXn9f8GugcrOz2ytSI++g2aunJe7uNfdoQWRFYXeC+NBXqds7O/j6cVA==",
+      "path": "jquery/1.8.1",
+      "hashPath": "jquery.1.8.1.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Razor.Design/2.1.2": {
       "type": "package",
       "serviceable": true,
@@ -3783,6 +3797,13 @@
       "sha512": "sha512-fK/76UmpC0FXBlGDFVPLJHQlDLYnGC+XY3eoDgCgbtrhi0vzbXDQ3n/IYHhqSKqXQfGw/u04A1drWs7rFVkRjw==",
       "path": "remotion.linq/2.2.0",
       "hashPath": "remotion.linq.2.2.0.nupkg.sha512"
+    },
+    "Semantic-UI-2.0/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c9YwDSGQvFXr76t1/LdUabgXj/ZtkQSRwlKWn4hOR8PpraNujRuB3tUBCZqFZSz3mfyPC5zIJ6TkMqKtO+zuUA==",
+      "path": "semantic-ui-2.0/2.1.0",
+      "hashPath": "semantic-ui-2.0.2.1.0.nupkg.sha512"
     },
     "System.Collections.Immutable/1.5.0": {
       "type": "package",

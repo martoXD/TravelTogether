@@ -56,14 +56,18 @@ namespace TravelTogether
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
-            .AddDefaultTokenProviders()
-            .AddUserManager<UserManager<TtUser>>();
+            .AddDefaultTokenProviders();
 
-            //services.AddScoped<IUserStore<TtUser>, UserStore<TtUser>>();
-            //services.AddSingleton<UserManager<TtUser>>();
-            //services.AddSingleton<SignInManager<TtUser>>();
+            services.AddMvc(options => 
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // App services
+            //services.AddScoped<UserStore<TtUser>>();
+            //services.AddTransient<SignInManager<TtUser>>();
+            //services.AddScoped<UserManager<TtUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

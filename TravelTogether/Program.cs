@@ -19,6 +19,10 @@ namespace TravelTogether
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .ConfigureLogging(logging =>
+            {
+                logging.AddConsole();
+            })
+            .UseStartup<Startup>();
     }
 }

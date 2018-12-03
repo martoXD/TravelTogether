@@ -1,16 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@inject UserManager<IdentityUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(this.User);
+    var isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TravelTogether</title>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 
     @RenderSection("Links", required: false)
 
@@ -26,30 +33,55 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/Home/Index">Home<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Home/Index">Home</a>
                 </li>
             </ul>
-            <div class="nav-item">
-                <form method="post" action="/Account/Login" class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-2" type="text" name="Username" placeholder="Username"
-                           aria-label="Username">
-                    <input class="form-control mr-2 mt-2 mt-lg-0 mt-md-0 mt-sm-0" type="password" placeholder="Password" name="Password" aria-label="Password">
-                    <button class="btn my-2 my-sm-0" type="submit">
-                        <span class="ui grey header">Login</span>
-                    </button>
-                </form>
-            </div>
-            <div class="nav-item">
-                <form method="get" action="/Account/Register">
-                    <button class="btn my-sm-0 ml-lg-2" type="submit">
-                        <span class="ui grey header">Register</span>
-                    </button>
-                </form>
-            </div>
+            @if (isAuthenthicated.HasValue && !isAuthenthicated.Value)
+            {
+                <div class="nav-item">
+                    <form method="post" asp-action="Login" asp-controller="Account" class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-2" type="text" name="Username" placeholder="Username"
+                               aria-label="Username">
+                        <input class="form-control mr-2 mt-2 mt-lg-0 mt-md-0 mt-sm-0" type="password" placeholder="Password" name="Password" aria-label="Password">
+                        <button class="btn my-2 my-sm-0" type="submit">
+                            <span class="ui grey header">Login</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="nav-item">
+                    <form method="get" action="/Account/Register">
+                        <button class="btn my-sm-0 ml-lg-2" type="submit">
+                            <span class="ui grey header">Register</span>
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item">
+                    <img class="ui mini rounded image" src="~/images/sample.jpg">
+                </div>
+                <div class="nav-item ml-lg-2">
+                    <h4 class="ui grey inverted header">martoXD</h4>
+                </div>
+                <div class="nav-item ml-lg-2">
+                    <div class="my_dropdown">
+                        <div onclick="openDropdownMenu()" class="my_dropdownbutton bg-dark">
+                            <i class="angle down icon"></i>
+                        </div>
+                        <div id="myDropdown" class="my_dropdown_content">
+                            <a href="#" class="font-weight-bold">My Profile <i class="fas fa-user"></i></a>
+                            <a href="#" class="font-weight-bold">Trips <i class="briefcase icon"></i></a>
+                            <a href="#" class="font-weight-bold">Friends <i class="fas fa-users"></i></a>
+                            <a href="#" class="font-weight-bold">Mesages <i class="fas fa-envelope"></i></a>
+                            <hr />
+                            <a href="#" class="font-weight-bold">Logout <i class="sign-out icon"></i></a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </nav>
-
-    <partial name="_CookieConsentPartial" />
 
     <div class="container-fluid body-content">
         @RenderBody()
@@ -60,9 +92,9 @@
 
     @RenderSection("Scripts", required: false)
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
 </body>
 </html>

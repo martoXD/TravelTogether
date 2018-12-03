@@ -9,7 +9,7 @@ namespace TravelTogether.ViewModels.Account
     public class LoginInputModel
     {
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

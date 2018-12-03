@@ -13,7 +13,7 @@ namespace TravelTogether.ViewModels.Account
         //public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -39,7 +39,7 @@ namespace TravelTogether.ViewModels.Account
         [StringLength(50)]
         public string City { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Gender is required.")]
         public string Gender { get; set; }
     }
 }
