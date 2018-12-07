@@ -1,5 +1,4 @@
-﻿
-@inject UserManager<IdentityUser> UserManager
+﻿@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Home Page";
@@ -172,14 +171,17 @@ else
                                 </div>
                             </div>
                         </div>
-                        <form id="my_post_modal_form">
-                            <div class="form-group my_form-group_modal">
-                                <textarea class="form-control" rows="3" placeholder="Add Comment..."></textarea>
-                            </div>
-                            <div class="d-flex justify-content-around">
-                                <a href="#" onclick="sendComment()" class="ui black button">Add Comment</a>
-                            </div>
-                        </form>
+                        @if (isAuthenthicated.HasValue && isAuthenthicated.Value)
+                        {
+                            <form id="my_post_modal_form">
+                                <div class="form-group my_form-group_modal">
+                                    <textarea class="form-control" rows="3" placeholder="Add Comment..."></textarea>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                    <a href="#" onclick="sendComment()" class="ui black button">Add Comment</a>
+                                </div>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using TravelTogether.Data;
 using TravelTogether.Models;
 using TravelTogether.Models.enums;
@@ -13,16 +15,22 @@ namespace TravelTogether.Controllers
     public class AccountController : Controller
     {
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger<AccountController> logger;
         private readonly ApplicationDbContext dbContext;
+        private readonly UserManager<IdentityUser> userManager;
 
         public AccountController(SignInManager<IdentityUser> signInManager,
             ILogger<AccountController> logger,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this.signInManager = signInManager;
             this.dbContext = dbContext;
             this.logger = logger;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [HttpPost]
@@ -36,7 +44,16 @@ namespace TravelTogether.Controllers
             var user = this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.UserName == inputModel.UserName);
 
-            this.signInManager.SignInAsync(user, false).Wait();
+            //var isMatch = userManager.CheckPasswordAsync(user, user.PasswordHash).Result;
+            //if (isMatch)
+            //{
+            //var signInStatus = this.signInManager.PasswordSignInAsync(user, inputModel.Password, true, false);
+
+            //if (signInStatus.IsCompletedSuccessfully)
+            //{
+                this.signInManager.SignInAsync(user, false).Wait();
+            //}
+            //}
 
             return RedirectToAction("Index", "Home");
         }
@@ -48,7 +65,7 @@ namespace TravelTogether.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterInputModel inputModel)
+        public async Task<IActionResult> Register(RegisterInputModel inputModel)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +85,16 @@ namespace TravelTogether.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (!this.dbContext.Users.Any())
+                    {
+                        var roleName = "Admin";
+                        var roleExists = await roleManager.RoleExistsAsync(roleName);
+                        if (roleExists)
+                        {
+                            this.userManager.AddToRoleAsync(user, roleName).Wait();
+                        }
+                    }
+
                     this.signInManager.SignInAsync(user, false).Wait();
                     return this.RedirectToAction("Index", "Home");
                 }
@@ -76,6 +103,42 @@ namespace TravelTogether.Controllers
             {
                 return this.View(inputModel);
             }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult MyProfile(string id)
+        {
+            var user = (TtUser)this.signInManager.UserManager.Users
+                .FirstOrDefault(u => u.Id == id);
+
+            var userProfileViewModel = new MyProfileViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Age = user.Age,
+                AboutMeDescription = user.AboutMeDescription,
+                City = user.City,
+                Country = user.Country,
+                Gender = user.Gender
+            };
+
+            foreach (var image in user.Images)
+            {
+                userProfileViewModel.Images.Add(image);
+            }
+
+            return this.View(userProfileViewModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            this.signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
         }

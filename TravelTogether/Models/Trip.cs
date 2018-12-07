@@ -17,8 +17,12 @@ namespace TravelTogether.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
+        [MinLength(5)]
         public string Country { get; set; }
 
+        [Required]
+        [MinLength(5)]
         public string City { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }

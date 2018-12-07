@@ -8,7 +8,7 @@ body {
 }
 
 footer {
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
@@ -16,6 +16,7 @@ footer {
     text-align: center;
     width: 100%;
     height: 10%;
+    z-index: 100;
 }
 
 /* Wrapping element */
@@ -68,11 +69,11 @@ footer {
     display: none;
     position: absolute;
     left: -135px;
-    top: 24px;
+    top: 33px;
     background-color: #76808e;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 100;
     border-radius: 10px;
 }
 
@@ -93,4 +94,20 @@ footer {
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {
     display: block;
+}
+
+.my_plane {
+    margin-right: 20px;
+    font-size: 30px;
+    color: #8d97a8;
+}
+
+    .my_plane:hover {
+        cursor: pointer;
+        color: #9da6b5;
+    }
+
+.my_layout_profile_picture{
+    width:35px !important;
+    height:35px !important;
 }

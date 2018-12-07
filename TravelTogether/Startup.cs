@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using TravelTogether.Data;
 using TravelTogether.Models;
+using TravelTogether.Services.Contracts;
+using TravelTogether.Services.Trips;
 using TravelTogether.Utilities;
 
 namespace TravelTogether
@@ -54,6 +56,8 @@ namespace TravelTogether
                 identityOptions.SignIn.RequireConfirmedEmail = false;
                 identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
             })
+            .AddRoles<IdentityRole>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
@@ -65,6 +69,8 @@ namespace TravelTogether
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // App services
+            services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser, IdentityRole>>();
+            services.AddTransient<ITripsService, TripsService>();
             //services.AddScoped<UserStore<TtUser>>();
             //services.AddTransient<SignInManager<TtUser>>();
             //services.AddScoped<UserManager<TtUser>>();

@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TravelTogether</title>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/js/jquery/jquery-3.3.1.js" type="text/javascript" ></script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" />
@@ -59,10 +59,15 @@
             else
             {
                 <div class="nav-item">
-                    <img class="ui mini rounded image" src="~/images/sample.jpg">
+                    <a href="/Trips/All">
+                        <i class="fas fa-plane my_plane"></i>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <img class="ui mini rounded image my_layout_profile_picture" src="~/images/default_icon.jpg">
                 </div>
                 <div class="nav-item ml-lg-2">
-                    <h4 class="ui grey inverted header">martoXD</h4>
+                    <h4 class="ui grey inverted header">@currentUser.UserName</h4>
                 </div>
                 <div class="nav-item ml-lg-2">
                     <div class="my_dropdown">
@@ -70,12 +75,18 @@
                             <i class="angle down icon"></i>
                         </div>
                         <div id="myDropdown" class="my_dropdown_content">
-                            <a href="#" class="font-weight-bold">My Profile <i class="fas fa-user"></i></a>
-                            <a href="#" class="font-weight-bold">Trips <i class="briefcase icon"></i></a>
+                            <a href="/Account/MyProfile?id=@currentUser.Id" class="font-weight-bold">
+                                My Profile
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <a href="#" class="font-weight-bold">My Trips <i class="briefcase icon"></i></a>
                             <a href="#" class="font-weight-bold">Friends <i class="fas fa-users"></i></a>
                             <a href="#" class="font-weight-bold">Mesages <i class="fas fa-envelope"></i></a>
                             <hr />
-                            <a href="#" class="font-weight-bold">Logout <i class="sign-out icon"></i></a>
+                            <a href="/Account/Logout" class="font-weight-bold">
+                                Logout
+                                <i class="sign-out icon"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
