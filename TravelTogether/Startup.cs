@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ using TravelTogether.Models;
 using TravelTogether.Services.Contracts;
 using TravelTogether.Services.Trips;
 using TravelTogether.Utilities;
+using TravelTogether.ViewModels.Account;
 
 namespace TravelTogether
 {
@@ -62,11 +64,23 @@ namespace TravelTogether
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+            });
+
             services.AddMvc(options => 
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+            });
+
+            services.AddAutoMapper();
 
             // App services
             services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser, IdentityRole>>();
@@ -92,8 +106,10 @@ namespace TravelTogether
             Seeder.Seed(serviceProvider);
 
             app.UseHttpsRedirection();
+            app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseAuthentication();
 

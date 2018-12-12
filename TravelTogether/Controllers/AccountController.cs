@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelTogether.Data;
 using TravelTogether.Models;
-using TravelTogether.Models.enums;
 using TravelTogether.ViewModels.Account;
 
 namespace TravelTogether.Controllers
@@ -19,18 +18,21 @@ namespace TravelTogether.Controllers
         private readonly ILogger<AccountController> logger;
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IMapper mapper;
 
         public AccountController(SignInManager<IdentityUser> signInManager,
             ILogger<AccountController> logger,
             ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IMapper mapper)
         {
             this.signInManager = signInManager;
             this.dbContext = dbContext;
             this.logger = logger;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -41,19 +43,13 @@ namespace TravelTogether.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var user = this.signInManager.UserManager.Users
+            var user = (TtUser)this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.UserName == inputModel.UserName);
-
-            //var isMatch = userManager.CheckPasswordAsync(user, user.PasswordHash).Result;
-            //if (isMatch)
-            //{
-            //var signInStatus = this.signInManager.PasswordSignInAsync(user, inputModel.Password, true, false);
-
-            //if (signInStatus.IsCompletedSuccessfully)
-            //{
+            
+            if (user != null)
+            {
                 this.signInManager.SignInAsync(user, false).Wait();
-            //}
-            //}
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -69,17 +65,7 @@ namespace TravelTogether.Controllers
         {
             if (ModelState.IsValid)
             {
-                var gender = Enum.TryParse(inputModel.Gender, out Gender genderValue);
-                var user = new TtUser()
-                {
-                    UserName = inputModel.Username,
-                    PasswordHash = inputModel.Password,
-                    FirstName = inputModel.FirstName,
-                    LastName = inputModel.LastName,
-                    Country = inputModel.Country,
-                    City = inputModel.City,
-                    Gender = genderValue
-                };
+                var user = this.mapper.Map<TtUser>(inputModel);
 
                 var result = this.signInManager.UserManager.CreateAsync(user, inputModel.Password).Result;
 
@@ -114,17 +100,7 @@ namespace TravelTogether.Controllers
             var user = (TtUser)this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.Id == id);
 
-            var userProfileViewModel = new MyProfileViewModel
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserName = user.UserName,
-                Age = user.Age,
-                AboutMeDescription = user.AboutMeDescription,
-                City = user.City,
-                Country = user.Country,
-                Gender = user.Gender
-            };
+            var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
 
             foreach (var image in user.Images)
             {
@@ -141,6 +117,52 @@ namespace TravelTogether.Controllers
             this.signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Edit(string id)
+        {
+            var user = (TtUser)this.signInManager.UserManager.Users
+                .FirstOrDefault(u => u.Id == id);
+
+            var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
+
+            foreach (var image in user.Images)
+            {
+                userProfileViewModel.Images.Add(image);
+            }
+
+            return this.View(userProfileViewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(MyProfileViewModel inputModel)
+        {
+            var user = (TtUser)this.signInManager.UserManager.Users
+               .FirstOrDefault(u => u.Id == inputModel.Id);
+
+            if (ModelState.IsValid)
+            {
+                user.AboutMeDescription = inputModel.AboutMeDescription;
+                user.UserName = inputModel.UserName;
+                user.FirstName = inputModel.FirstName;
+                user.LastName = inputModel.LastName;
+                user.Country = inputModel.Country;
+                user.City = inputModel.City;
+                user.Age = inputModel.Age;
+                user.Gender = user.Gender;
+
+                dbContext.Update(user);
+                dbContext.SaveChanges();
+
+                return Redirect($"/Account/MyProfile?id={user.Id}");
+            }
+            else
+            {
+                return this.View(inputModel);
+            }
         }
     }
 }

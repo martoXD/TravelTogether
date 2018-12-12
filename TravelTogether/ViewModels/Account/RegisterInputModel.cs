@@ -5,7 +5,7 @@ namespace TravelTogether.ViewModels.Account
     public class RegisterInputModel
     {
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         //[Required]
         //[EmailAddress]
