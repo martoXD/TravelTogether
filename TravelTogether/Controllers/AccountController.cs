@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelTogether.Data;
@@ -19,13 +25,15 @@ namespace TravelTogether.Controllers
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IMapper mapper;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         public AccountController(SignInManager<IdentityUser> signInManager,
             ILogger<AccountController> logger,
             ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment)
         {
             this.signInManager = signInManager;
             this.dbContext = dbContext;
@@ -33,6 +41,7 @@ namespace TravelTogether.Controllers
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.mapper = mapper;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         [HttpPost]
@@ -45,7 +54,7 @@ namespace TravelTogether.Controllers
 
             var user = (TtUser)this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.UserName == inputModel.UserName);
-            
+
             if (user != null)
             {
                 this.signInManager.SignInAsync(user, false).Wait();
@@ -101,9 +110,28 @@ namespace TravelTogether.Controllers
                 .FirstOrDefault(u => u.Id == id);
 
             var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
+            var profileImage = this.dbContext.Images
+                .FirstOrDefault(img => user.ProfileImageId == img.Id);
 
-            foreach (var image in user.Images)
+            if (profileImage != null)
             {
+                string imageBase64 = Convert.ToBase64String(profileImage.ImageContent);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                userProfileViewModel.ProfileImageSrc = imageSrc;
+                userProfileViewModel.ProfileImageId = profileImage.Id;
+            }
+
+            var images = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
+
+            userProfileViewModel.Images = new List<Image>();
+
+            foreach (var image in images)
+            {
+                string imageBase64 = Convert.ToBase64String(image.ImageContent);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                image.ImageSource = imageSrc;
                 userProfileViewModel.Images.Add(image);
             }
 
@@ -126,10 +154,29 @@ namespace TravelTogether.Controllers
             var user = (TtUser)this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.Id == id);
 
-            var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
+            var userImages = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
 
-            foreach (var image in user.Images)
+            var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
+            var profileImage = this.dbContext.Images
+                .FirstOrDefault(img => img.Id == user.ProfileImageId);
+
+            if (profileImage != null)
             {
+                string imageBase64 = Convert.ToBase64String(profileImage.ImageContent);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                userProfileViewModel.ProfileImageSrc = imageSrc;
+                userProfileViewModel.ProfileImageId = profileImage.Id;
+            }
+
+            userProfileViewModel.Images = new List<Image>();
+
+            foreach (var image in userImages)
+            {
+                string imageBase64 = Convert.ToBase64String(image.ImageContent);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                image.ImageSource = imageSrc;
                 userProfileViewModel.Images.Add(image);
             }
 
@@ -138,10 +185,12 @@ namespace TravelTogether.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(MyProfileViewModel inputModel)
+        public IActionResult Edit(MyProfileViewModel inputModel, IFormFile profileImage, IFormFile imageInput)
         {
             var user = (TtUser)this.signInManager.UserManager.Users
                .FirstOrDefault(u => u.Id == inputModel.Id);
+
+            var userImages = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
 
             if (ModelState.IsValid)
             {
@@ -153,14 +202,87 @@ namespace TravelTogether.Controllers
                 user.City = inputModel.City;
                 user.Age = inputModel.Age;
                 user.Gender = user.Gender;
+                if (profileImage != null)
+                {
+                    MemoryStream ms = new MemoryStream();
+                    profileImage.OpenReadStream().CopyTo(ms);
 
-                dbContext.Update(user);
-                dbContext.SaveChanges();
+                    var image = new Image()
+                    {
+                        Id = this.dbContext.Images.Count() + 1,
+                        ImageContent = ms.ToArray(),
+                        TtUser = user,
+                        TtUserId = user.Id
+                    };
+
+                    user.ProfileImageId = image.Id;
+                    user.Images.Add(image);
+
+                    this.dbContext.Images.Add(image);
+
+                    this.dbContext.Entry(user).State = EntityState.Modified;
+
+                    this.dbContext.Database.OpenConnection();
+                    this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images ON");
+                    this.dbContext.SaveChanges();
+                    this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images OFF");
+                    this.dbContext.Database.CloseConnection();
+                }
+                if (imageInput != null)
+                {
+                    MemoryStream ms = new MemoryStream();
+                    imageInput.OpenReadStream().CopyTo(ms);
+
+                    var image = new Image()
+                    {
+                        Id = this.dbContext.Images.Count() + 1,
+                        ImageContent = ms.ToArray(),
+                        TtUser = user,
+                        TtUserId = user.Id
+                    };
+
+                    user.Images.Add(image);
+
+                    this.dbContext.Images.Add(image);
+
+                    this.dbContext.Entry(user).State = EntityState.Modified;
+
+                }
+
+                this.dbContext.Update(user);
+
+                this.dbContext.Database.OpenConnection();
+                this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images ON");
+                this.dbContext.SaveChanges();
+                this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images OFF");
+                this.dbContext.Database.CloseConnection();
 
                 return Redirect($"/Account/MyProfile?id={user.Id}");
             }
             else
             {
+                var imageProfile = this.dbContext.Images.FirstOrDefault(img => img.Id == user.ProfileImageId);
+
+                if (imageProfile != null)
+                {
+                    string imageBase64 = Convert.ToBase64String(imageProfile.ImageContent);
+                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                    inputModel.ProfileImageId = imageProfile.Id;
+                    inputModel.ProfileImageSrc = imageSrc;
+                }
+                else
+                {
+                    string imgPath = @"D:/softuni/TravelTogether/TravelTogether/wwwroot/images/default_icon.jpg";
+
+                    byte[] byteData = System.IO.File.ReadAllBytes(imgPath);
+
+                    string imgBase64Data = Convert.ToBase64String(byteData);
+                    string imgDataURL = string.Format("data:image/png;base64,{0}", imgBase64Data);
+
+                    inputModel.ProfileImageSrc = imgDataURL;
+                }
+
                 return this.View(inputModel);
             }
         }

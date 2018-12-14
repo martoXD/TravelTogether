@@ -13,6 +13,8 @@ namespace TravelTogether.Models
         public int Id { get; set; }
 
         public byte[] ImageContent { get; set; }
+        
+        public string ImageSource { get; set; }
 
         [ForeignKey("Trip")]
         public int? TripId { get; set; }
