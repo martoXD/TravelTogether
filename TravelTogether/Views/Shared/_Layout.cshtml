@@ -67,7 +67,9 @@
                     <img class="ui mini rounded image my_layout_profile_picture" src="~/images/default_icon.jpg">
                 </div>
                 <div class="nav-item ml-lg-2">
-                    <h4 class="ui grey inverted header">@currentUser.UserName</h4>
+                    <a href="/Account/MyProfile?id=@currentUser.Id">
+                        <h4 class="ui grey inverted header">@currentUser.UserName</h4>
+                    </a>
                 </div>
                 <div class="nav-item ml-lg-2">
                     <div class="my_dropdown">

@@ -189,9 +189,7 @@ namespace TravelTogether.Controllers
         {
             var user = (TtUser)this.signInManager.UserManager.Users
                .FirstOrDefault(u => u.Id == inputModel.Id);
-
-            var userImages = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
-
+            
             if (ModelState.IsValid)
             {
                 user.AboutMeDescription = inputModel.AboutMeDescription;
@@ -262,7 +260,7 @@ namespace TravelTogether.Controllers
             else
             {
                 var imageProfile = this.dbContext.Images.FirstOrDefault(img => img.Id == user.ProfileImageId);
-
+                
                 if (imageProfile != null)
                 {
                     string imageBase64 = Convert.ToBase64String(imageProfile.ImageContent);
@@ -281,6 +279,18 @@ namespace TravelTogether.Controllers
                     string imgDataURL = string.Format("data:image/png;base64,{0}", imgBase64Data);
 
                     inputModel.ProfileImageSrc = imgDataURL;
+                }
+
+                var userImages = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
+                inputModel.Images = new List<Image>();
+
+                foreach (var image in userImages)
+                {
+                    string imageBase64 = Convert.ToBase64String(image.ImageContent);
+                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+
+                    image.ImageSource = imageSrc;
+                    inputModel.Images.Add(image);
                 }
 
                 return this.View(inputModel);
