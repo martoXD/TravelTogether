@@ -212,8 +212,12 @@ namespace TravelTogether.Controllers
                         TtUser = user,
                         TtUserId = user.Id
                     };
+                    string imageBase64 = Convert.ToBase64String(image.ImageContent);
+                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                    image.ImageSource = imageSrc;
 
                     user.ProfileImageId = image.Id;
+                    user.ProfileImageSrc = image.ImageSource;
                     user.Images.Add(image);
 
                     this.dbContext.Images.Add(image);
@@ -230,7 +234,7 @@ namespace TravelTogether.Controllers
                 {
                     MemoryStream ms = new MemoryStream();
                     imageInput.OpenReadStream().CopyTo(ms);
-
+                    
                     var image = new Image()
                     {
                         Id = this.dbContext.Images.Count() + 1,
@@ -239,12 +243,15 @@ namespace TravelTogether.Controllers
                         TtUserId = user.Id
                     };
 
+                    string imageBase64 = Convert.ToBase64String(image.ImageContent);
+                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                    image.ImageSource = imageSrc;
+
                     user.Images.Add(image);
 
                     this.dbContext.Images.Add(image);
 
                     this.dbContext.Entry(user).State = EntityState.Modified;
-
                 }
 
                 this.dbContext.Update(user);

@@ -18,5 +18,9 @@ namespace TravelTogether.Models
         [ForeignKey("Post")]
         public int PostId { get; set; }
         public virtual Post Post { get; set; }
+
+        [ForeignKey("Sender")]
+        public string SenderId { get; set; }
+        public virtual TtUser Sender { get; set; }
     }
 }

@@ -17,10 +17,12 @@ namespace TravelTogether.Models
         [Key]
         public int Id { get; set; }
 
-        [StringLength(100)]
+        [StringLength(40)]
         public string Caption { get; set; }
 
         public int Likes { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         [ForeignKey("TtUser")]
         public string TtUserId { get; set; }
