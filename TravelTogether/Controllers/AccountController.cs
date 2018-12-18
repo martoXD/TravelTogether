@@ -76,6 +76,15 @@ namespace TravelTogether.Controllers
             {
                 var user = this.mapper.Map<TtUser>(inputModel);
 
+                string imgPath = @"D:/softuni/TravelTogether/TravelTogether/wwwroot/images/default_icon.jpg";
+
+                byte[] byteData = System.IO.File.ReadAllBytes(imgPath);
+
+                string imgBase64Data = Convert.ToBase64String(byteData);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", imgBase64Data);
+
+                user.DefaultImageSrc = imgDataURL;
+
                 var result = this.signInManager.UserManager.CreateAsync(user, inputModel.Password).Result;
 
                 if (result.Succeeded)
@@ -223,12 +232,6 @@ namespace TravelTogether.Controllers
                     this.dbContext.Images.Add(image);
 
                     this.dbContext.Entry(user).State = EntityState.Modified;
-
-                    this.dbContext.Database.OpenConnection();
-                    this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images ON");
-                    this.dbContext.SaveChanges();
-                    this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images OFF");
-                    this.dbContext.Database.CloseConnection();
                 }
                 if (imageInput != null)
                 {
@@ -255,12 +258,7 @@ namespace TravelTogether.Controllers
                 }
 
                 this.dbContext.Update(user);
-
-                this.dbContext.Database.OpenConnection();
-                this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images ON");
                 this.dbContext.SaveChanges();
-                this.dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Images OFF");
-                this.dbContext.Database.CloseConnection();
 
                 return Redirect($"/Account/MyProfile?id={user.Id}");
             }

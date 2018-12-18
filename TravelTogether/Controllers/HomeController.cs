@@ -28,9 +28,8 @@ namespace TravelTogether.Controllers
         public IActionResult Index()
         {
             var allPosts = this.dbContext.Posts
-                .Include(p => p.TtUser)
-                .Include(p => p.Image)
                 .Include(p => p.Comments)
+                .ThenInclude(c => c.Sender)
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(MAX_POSTS_PERPAGE)
                 .ToList();

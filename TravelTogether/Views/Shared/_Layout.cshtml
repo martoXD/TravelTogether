@@ -2,7 +2,11 @@
 
 @{
     var currentUser = await UserManager.GetUserAsync(this.User);
-    var isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    bool? isAuthenthicated = false;
+    if (currentUser != null)
+    {
+        isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    }
 }
 
 <!DOCTYPE html>

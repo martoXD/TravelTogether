@@ -5,7 +5,11 @@
 @{
     ViewData["Title"] = "Home Page";
     var currentUser = await UserManager.GetUserAsync(this.User);
-    var isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    bool? isAuthenthicated = false;
+    if (currentUser != null)
+    {
+        isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    }
 }
 
 @section Links{
@@ -30,16 +34,24 @@
     </div>
     <div class="container-fluid my_posts_container">
         <div class="row">
-            @{ var number = 1; }
             @foreach (var post in Model)
             {
                 <div class="col-md-3">
                     <div class="ui teal card my_card">
                         <div class="content">
                             <div class="right floated meta">
-                                <span class="ui grey inverted header">@post.CreatedOn.ToString("dd-MMM-yy")</span>
+                                <span class="ui grey inverted header">
+                                    @post.CreatedOn.ToString("dd-MMM-yy")
+                                </span>
                             </div>
-                            <img class="ui avatar image" src="@post.TtUser.ProfileImageSrc">
+                            @if (post.TtUser.ProfileImageId == 0)
+                            {
+                                <img class="ui avatar image" src="@post.TtUser.DefaultImageSrc">
+                            }
+                            else
+                            {
+                                <img class="ui avatar image" src="@post.TtUser.ProfileImageSrc">
+                            }
                             <span class="ui grey inverted header my_username_header">@post.TtUser.UserName</span>
                         </div>
                         <hr style="margin: 0px;" />
@@ -68,11 +80,103 @@
                         <div class="extra content">
                             <div class="ui large transparent left icon input">
                                 <i class="heart outline icon"></i>
-                                <input id="commentData{@number++}" class="postInput" type="text"
-                                       placeholder="Add Comment..." name="commentData" />
-                                <a href="#" onclick="sendComment(@post.Id, '@currentUser.Id')">
+                                <input id="commentData" class="postInput" type="text"
+                                       placeholder="Add Comment..." name="commentData" data-commentData />
+                                <input type="hidden" value="" />
+                                <a class="my_sendComment_btn ml-4" href="#"
+                                   onclick="sendComment(@post.Id, '@currentUser.Id')">
                                     <i class="fas fa-plus"></i>
                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*PostModal*@
+                <div class="modal fade" id="post_Modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content my_modal">
+                            <div class="modal-body">
+                                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                <div class="ui card my_card_modal">
+                                    <div class="content">
+                                        <div class="right floated meta">
+                                            <span class="ui grey inverted header">
+                                                @post.CreatedOn.ToString("dd-MMM-yy")
+                                            </span>
+                                        </div>
+                                        @if (post.TtUser.ProfileImageId == 0)
+                                        {
+                                            <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.DefaultImageSrc" />
+                                        }
+                                        else
+                                        {
+                                            <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.ProfileImageSrc" />
+                                        }
+                                        <span class="ui grey inverted header my_username_header_modal">
+                                            @post.TtUser.UserName
+                                        </span>
+                                    </div>
+                                    <hr style="margin: 0px;" />
+                                    <span style="margin-left: 15px;">
+                                        @post.Caption
+                                    </span>
+                                    <hr style="margin: 0px;" />
+                                    <div class="image">
+                                        <img src="@post.Image.ImageSource" />
+                                    </div>
+                                    <div class="content">
+                                        <span class="right floated">
+                                            <i class="heart outline like icon"></i>
+                                            <span>@post.Likes likes</span>
+                                        </span>
+                                        <i class="comment icon"></i>
+                                        <span>@post.Comments.Count() comments</span>
+                                    </div>
+                                    <div class="extra content">
+                                        @foreach (var comment in post.Comments)
+                                        {
+                                            <div class="ui comments">
+                                                <div class="comment">
+                                                    <a class="avatar">
+                                                        @if (comment.Sender.ProfileImageId == 0)
+                                                        {
+                                                            <img src="@comment.Sender.DefaultImageSrc" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@comment.Sender.ProfileImageSrc" />
+                                                        }
+                                                    </a>
+                                                    <div class="content">
+                                                        <a class="author">
+                                                            @comment.Sender.FirstName @comment.Sender.LastName
+                                                        </a>
+                                                        <div class="metadata">
+                                                            <div class="date">2 days ago</div>
+                                                        </div>
+                                                        <div class="text">
+                                                            @comment.CommentContent
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (isAuthenthicated.HasValue && isAuthenthicated.Value)
+                                        {
+                                            <form id="my_post_modal_form">
+                                                <div class="form-group my_form-group_modal">
+                                                    <textarea class="form-control" rows="3"
+                                                              placeholder="Add Comment..."></textarea>
+                                                </div>
+                                                <div class="d-flex justify-content-around">
+                                                    <a href="#" onclick="sendComment()" class="ui black button">
+                                                        Add Comment
+                                                    </a>
+                                                </div>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -156,71 +260,6 @@ else
         </div>
     </div>
 }
-
-@*PostModal*@
-<div class="modal fade" id="post_Modal">
-    <div class="modal-dialog">
-        <div class="modal-content my_modal">
-            <div class="modal-body">
-                <a href="#" class="close" data-dismiss="modal">&times;</a>
-                <div class="ui card my_card_modal">
-                    <div class="content">
-                        <div class="right floated meta">
-                            <span class="ui grey inverted header">@DateTime.Now.Year</span>
-                        </div>
-                        <img class="ui avatar image my_modal_avatar_image" src="~/images/sample.jpg">
-                        <span class="ui grey inverted header my_username_header_modal">martoXD</span>
-                    </div>
-                    <hr style="margin: 0px;" />
-                    <span style="margin-left: 15px;">
-                        Caption goes here!
-                    </span>
-                    <hr style="margin: 0px;" />
-                    <div class="image">
-                        <img src="~/images/sample.jpg" />
-                    </div>
-                    <div class="content">
-                        <span class="right floated">
-                            <i class="heart outline like icon"></i>
-                            <span>17 likes</span>
-                        </span>
-                        <i class="comment icon"></i>
-                        <span>3 comments</span>
-                    </div>
-                    <div class="extra content">
-                        <div class="ui comments">
-                            <div class="comment">
-                                <a class="avatar">
-                                    <img src="~/images/sample.jpg">
-                                </a>
-                                <div class="content">
-                                    <a class="author">Stevie Feliciano</a>
-                                    <div class="metadata">
-                                        <div class="date">2 days ago</div>
-                                    </div>
-                                    <div class="text">
-                                        Hey guys, I hope this example comment is helping you read this documentation.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @if (isAuthenthicated.HasValue && isAuthenthicated.Value)
-                        {
-                            <form id="my_post_modal_form">
-                                <div class="form-group my_form-group_modal">
-                                    <textarea class="form-control" rows="3" placeholder="Add Comment..."></textarea>
-                                </div>
-                                <div class="d-flex justify-content-around">
-                                    <a href="#" onclick="sendComment()" class="ui black button">Add Comment</a>
-                                </div>
-                            </form>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @*CreatePostModal*@
 <div class="modal fade" id="createPost_Modal">
