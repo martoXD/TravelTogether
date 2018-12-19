@@ -18,6 +18,7 @@ namespace TravelTogether.Data
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripUser> TripUsers { get; set; }
         public DbSet<FriendShip> FriendShips { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -40,6 +41,7 @@ namespace TravelTogether.Data
             modelBuilder.ApplyConfiguration(new TripUserConfig());
             modelBuilder.ApplyConfiguration(new TtUserConfig());
             modelBuilder.ApplyConfiguration(new UserFriendConfig());
+            modelBuilder.ApplyConfiguration(new LikeConfig());
             base.OnModelCreating(modelBuilder);
         }
     }

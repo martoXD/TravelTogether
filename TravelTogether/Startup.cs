@@ -85,6 +85,7 @@ namespace TravelTogether
             // App services
             services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser, IdentityRole>>();
             services.AddTransient<ITripsService, TripsService>();
+            //services.AddScoped<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
             //services.AddScoped<UserStore<TtUser>>();
             //services.AddTransient<SignInManager<TtUser>>();
             //services.AddScoped<UserManager<TtUser>>();

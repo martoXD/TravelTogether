@@ -26,6 +26,7 @@ namespace TravelTogether.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IMapper mapper;
         private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IPasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
 
         public AccountController(SignInManager<IdentityUser> signInManager,
             ILogger<AccountController> logger,
@@ -33,7 +34,8 @@ namespace TravelTogether.Controllers
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IMapper mapper,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment,
+            IPasswordHasher<IdentityUser> passwordHasher)
         {
             this.signInManager = signInManager;
             this.dbContext = dbContext;
@@ -57,7 +59,10 @@ namespace TravelTogether.Controllers
 
             if (user != null)
             {
-                this.signInManager.SignInAsync(user, false).Wait();
+                if(passwordHasher.VerifyHashedPassword(user, user.PasswordHash, inputModel.Password) == PasswordVerificationResult.Success)
+                {
+                    this.signInManager.SignInAsync(user, false).Wait();
+                }
             }
 
             return RedirectToAction("Index", "Home");

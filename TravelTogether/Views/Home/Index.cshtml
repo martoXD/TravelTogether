@@ -64,13 +64,28 @@
                         </div>
                         <div class="content">
                             <span class="right floated">
-                                <i class="heart outline like icon"></i>
-                                <span>@post.Likes likes</span>
+                                @if (post.Likes.Any(l => l.TtUserId == currentUser.Id))
+                                {
+                                    {
+                                        var likeId = post.Likes.FirstOrDefault(l => l.PostId == post.Id).Id;
+                                        <a href="#" class="my_dislike_btn"
+                                           onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
+                                            <i class="heart outline like icon"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="#" class="my_like_btn" onclick="like(@post.Id, '@currentUser.Id')">
+                                        <i class="heart outline like icon"></i>
+                                    </a>
+                                }
+                                <span>@post.Likes.Count() likes</span>
                             </span>
                             <i class="comment icon"></i>
                             <span>@post.Comments.Count() comments</span>
                             <div class="d-flex justify-content-center mt-2">
-                                <a href="#" data-toggle="modal" data-target="#post_Modal">
+                                <a href="#" data-toggle="modal" data-target="#post_Modal{@post.Id}">
                                     <span class="dot"></span>
                                     <span class="dot"></span>
                                     <span class="dot"></span>
@@ -92,7 +107,7 @@
                     </div>
                 </div>
                 @*PostModal*@
-                <div class="modal fade" id="post_Modal">
+                <div class="modal fade" id="post_Modal{@post.Id}">
                     <div class="modal-dialog">
                         <div class="modal-content my_modal">
                             <div class="modal-body">
@@ -126,8 +141,25 @@
                                     </div>
                                     <div class="content">
                                         <span class="right floated">
-                                            <i class="heart outline like icon"></i>
-                                            <span>@post.Likes likes</span>
+                                            @if (post.Likes.Any(l => l.TtUserId == currentUser.Id))
+                                            {
+                                                {
+                                                    var likeId = post.Likes
+                                                        .FirstOrDefault(l => l.PostId == post.Id).Id;
+                                                    <a href="#" class="my_dislike_btn"
+                                                       onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
+                                                        <i class="heart outline like icon"></i>
+                                                    </a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="my_like_btn"
+                                                   onclick="like(@post.Id, '@currentUser.Id')">
+                                                    <i class="heart outline like icon"></i>
+                                                </a>
+                                            }
+                                            <span>@post.Likes.Count() likes</span>
                                         </span>
                                         <i class="comment icon"></i>
                                         <span>@post.Comments.Count() comments</span>
@@ -148,7 +180,7 @@
                                                         }
                                                     </a>
                                                     <div class="content">
-                                                        <a class="author">
+                                                        <a class="author my_author">
                                                             @comment.Sender.FirstName @comment.Sender.LastName
                                                         </a>
                                                         <div class="metadata">

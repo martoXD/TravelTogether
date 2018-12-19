@@ -12,6 +12,7 @@ namespace TravelTogether.Models
         public Post()
         {
             this.Comments = new HashSet<Comment>();
+            this.Likes = new HashSet<Like>();
         }
 
         [Key]
@@ -20,8 +21,6 @@ namespace TravelTogether.Models
 
         [StringLength(40)]
         public string Caption { get; set; }
-
-        public int Likes { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
@@ -34,5 +33,7 @@ namespace TravelTogether.Models
         public virtual Image Image { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }
