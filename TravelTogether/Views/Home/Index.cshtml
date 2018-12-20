@@ -67,8 +67,9 @@
                                 @if (post.Likes.Any(l => l.TtUserId == currentUser.Id))
                                 {
                                     {
-                                        var likeId = post.Likes.FirstOrDefault(l => l.PostId == post.Id).Id;
-                                        <a href="#" class="my_dislike_btn"
+                                        var likeId = post.Likes.FirstOrDefault(l => l.PostId == post.Id
+                                        && l.TtUserId == currentUser.Id).Id;
+                                        <a class="my_dislike_btn"
                                            onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
                                             <i class="heart outline like icon"></i>
                                         </a>
@@ -76,14 +77,21 @@
                                 }
                                 else
                                 {
-                                    <a href="#" class="my_like_btn" onclick="like(@post.Id, '@currentUser.Id')">
+                                    <a class="my_like_btn" onclick="like(@post.Id, '@currentUser.Id')">
                                         <i class="heart outline like icon"></i>
                                     </a>
                                 }
-                                <span>@post.Likes.Count() likes</span>
+                                @if (post.Likes.Count() == 1)
+                                {
+                                    <span>@post.Likes.Count() like</span>
+                                }
+                                else
+                                {
+                                    <span>@post.Likes.Count() likes</span>
+                                }
                             </span>
                             <i class="comment icon"></i>
-                            <span>@post.Comments.Count() comments</span>
+                            <span id="postID-@post.Id">@post.Comments.Count() comments</span>
                             <div class="d-flex justify-content-center mt-2">
                                 <a href="#" data-toggle="modal" data-target="#post_Modal{@post.Id}">
                                     <span class="dot"></span>
@@ -95,10 +103,9 @@
                         <div class="extra content">
                             <div class="ui large transparent left icon input">
                                 <i class="heart outline icon"></i>
-                                <input id="commentData" class="postInput" type="text"
+                                <input id="commentData-@post.Id" class="postInput" type="text"
                                        placeholder="Add Comment..." name="commentData" data-commentData />
-                                <input type="hidden" value="" />
-                                <a class="my_sendComment_btn ml-4" href="#"
+                                <a class="my_sendComment_btn ml-4"
                                    onclick="sendComment(@post.Id, '@currentUser.Id')">
                                     <i class="fas fa-plus"></i>
                                 </a>
@@ -145,8 +152,9 @@
                                             {
                                                 {
                                                     var likeId = post.Likes
-                                                        .FirstOrDefault(l => l.PostId == post.Id).Id;
-                                                    <a href="#" class="my_dislike_btn"
+                                                        .FirstOrDefault(l => l.PostId == post.Id
+                                                        && l.TtUserId == currentUser.Id).Id;
+                                                    <a class="my_dislike_btn"
                                                        onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
                                                         <i class="heart outline like icon"></i>
                                                     </a>
@@ -154,15 +162,22 @@
                                             }
                                             else
                                             {
-                                                <a href="#" class="my_like_btn"
+                                                <a class="my_like_btn"
                                                    onclick="like(@post.Id, '@currentUser.Id')">
                                                     <i class="heart outline like icon"></i>
                                                 </a>
                                             }
-                                            <span>@post.Likes.Count() likes</span>
+                                            @if (post.Likes.Count() == 1)
+                                            {
+                                                <span>@post.Likes.Count() like</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@post.Likes.Count() likes</span>
+                                            }
                                         </span>
                                         <i class="comment icon"></i>
-                                        <span>@post.Comments.Count() comments</span>
+                                        <span id="postID-@post.Id">@post.Comments.Count() comments</span>
                                     </div>
                                     <div class="extra content">
                                         @foreach (var comment in post.Comments)
@@ -195,17 +210,16 @@
                                         }
                                         @if (isAuthenthicated.HasValue && isAuthenthicated.Value)
                                         {
-                                            <form id="my_post_modal_form">
-                                                <div class="form-group my_form-group_modal">
-                                                    <textarea class="form-control" rows="3"
-                                                              placeholder="Add Comment..."></textarea>
-                                                </div>
-                                                <div class="d-flex justify-content-around">
-                                                    <a href="#" onclick="sendComment()" class="ui black button">
-                                                        Add Comment
-                                                    </a>
-                                                </div>
-                                            </form>
+                                            <div class="form-group my_form-group_modal">
+                                                <textarea id="commentData-@post.Id" class="form-control" rows="3"
+                                                          placeholder="Add Comment..."></textarea>
+                                            </div>
+                                            <div class="d-flex justify-content-around">
+                                                <a onclick="sendCommentModal(@post.Id, '@currentUser.Id')"
+                                                   class="ui black button">
+                                                    Add Comment
+                                                </a>
+                                            </div>
                                         }
                                     </div>
                                 </div>
@@ -216,6 +230,7 @@
             }
         </div>
     </div>
+    @*SideBar*@
     <div class="sidebar bg-dark">
         <div class="ui middle aligned selection list">
             <div class="item">
