@@ -187,11 +187,11 @@
                                                     <a class="avatar">
                                                         @if (comment.Sender.ProfileImageId == 0)
                                                         {
-                                                            <img src="@comment.Sender.DefaultImageSrc" />
+                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc"/>
                                                         }
                                                         else
                                                         {
-                                                            <img src="@comment.Sender.ProfileImageSrc" />
+                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc"/>
                                                         }
                                                     </a>
                                                     <div class="content">
@@ -271,39 +271,143 @@
 }
 else
 {
+    @*LoggedOutUser*@
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3">
-                <div class="ui teal card my_card">
-                    <div class="content">
-                        <div class="right floated meta">
-                            <span class="ui grey inverted header">@DateTime.Now.Year</span>
+            @foreach (var post in Model)
+            {
+                <div class="col-md-3">
+                    <div class="ui teal card my_card">
+                        <div class="content">
+                            <div class="right floated meta">
+                                <span class="ui grey inverted header">
+                                    @post.CreatedOn.ToString("dd-MMM-yy")
+                                </span>
+                            </div>
+                            @if (post.TtUser.ProfileImageId == 0)
+                            {
+                                <img class="ui avatar image" src="@post.TtUser.DefaultImageSrc">
+                            }
+                            else
+                            {
+                                <img class="ui avatar image" src="@post.TtUser.ProfileImageSrc">
+                            }
+                            <span class="ui grey inverted header my_username_header">@post.TtUser.UserName</span>
                         </div>
-                        <img class="ui avatar image" src="~/images/sample.jpg">
-                        <span class="ui grey inverted header my_username_header">martoXD</span>
-                    </div>
-                    <div class="image">
-                        <img src="~/images/sample.jpg" />
-                    </div>
-                    <div class="content">
-                        <span class="right floated">
-                            <i class="heart outline like icon"></i>
-                            <span>17 likes</span>
+                        <hr style="margin: 0px;" />
+                        <span style="margin-left: 15px;">
+                            @post.Caption
                         </span>
-                        <i class="comment icon"></i>
-                        <span>3 comments</span>
-                    </div>
-                    <div class="extra content">
-                        <div class="d-flex justify-content-center">
-                            <a href="#" data-toggle="modal" data-target="#post_Modal">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </a>
+                        <hr style="margin: 0px;" />
+                        <div class="image">
+                            <img class="my_post_image" src="@post.Image.ImageSource" />
+                        </div>
+                        <div class="content">
+                            <span class="right floated">
+                                @if (post.Likes.Count() == 1)
+                                {
+                                    <span>@post.Likes.Count() like</span>
+                                }
+                                else
+                                {
+                                    <span>@post.Likes.Count() likes</span>
+                                }
+                            </span>
+                            <i class="comment icon"></i>
+                            <span id="postID-@post.Id">@post.Comments.Count() comments</span>
+                            <div class="d-flex justify-content-center mt-2">
+                                <a href="#" data-toggle="modal" data-target="#post_Modal{@post.Id}">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                @*PostModalLoggedOut*@
+                <div class="modal fade" id="post_Modal{@post.Id}">
+                    <div class="modal-dialog">
+                        <div class="modal-content my_modal">
+                            <div class="modal-body">
+                                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                <div class="ui card my_card_modal">
+                                    <div class="content">
+                                        <div class="right floated meta">
+                                            <span class="ui grey inverted header">
+                                                @post.CreatedOn.ToString("dd-MMM-yy")
+                                            </span>
+                                        </div>
+                                        @if (post.TtUser.ProfileImageId == 0)
+                                        {
+                                            <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.DefaultImageSrc" />
+                                        }
+                                        else
+                                        {
+                                            <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.ProfileImageSrc" />
+                                        }
+                                        <span class="ui grey inverted header my_username_header_modal">
+                                            @post.TtUser.UserName
+                                        </span>
+                                    </div>
+                                    <hr style="margin: 0px;" />
+                                    <span style="margin-left: 15px;">
+                                        @post.Caption
+                                    </span>
+                                    <hr style="margin: 0px;" />
+                                    <div class="image">
+                                        <img src="@post.Image.ImageSource" />
+                                    </div>
+                                    <div class="content">
+                                        <span class="right floated">
+                                            @if (post.Likes.Count() == 1)
+                                            {
+                                                <span>@post.Likes.Count() like</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@post.Likes.Count() likes</span>
+                                            }
+                                        </span>
+                                        <i class="comment icon"></i>
+                                        <span id="postID-@post.Id">@post.Comments.Count() comments</span>
+                                    </div>
+                                    <div class="extra content">
+                                        @foreach (var comment in post.Comments)
+                                        {
+                                            <div class="ui comments">
+                                                <div class="comment">
+                                                    <a class="avatar">
+                                                        @if (comment.Sender.ProfileImageId == 0)
+                                                        {
+                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc" />
+                                                        }
+                                                    </a>
+                                                    <div class="content">
+                                                        <a class="author my_author">
+                                                            @comment.Sender.FirstName @comment.Sender.LastName
+                                                        </a>
+                                                        <div class="metadata">
+                                                            <div class="date">2 days ago</div>
+                                                        </div>
+                                                        <div class="text">
+                                                            @comment.CommentContent
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 }

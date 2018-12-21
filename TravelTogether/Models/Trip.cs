@@ -18,12 +18,15 @@ namespace TravelTogether.Models
         public int Id { get; set; }
 
         [Required]
-        [MinLength(5)]
+        [MinLength(2)]
         public string Country { get; set; }
 
         [Required]
-        [MinLength(5)]
+        [MinLength(2)]
         public string City { get; set; }
+
+        public string CreatorId { get; set; }
+        public virtual TtUser Creator { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
 
