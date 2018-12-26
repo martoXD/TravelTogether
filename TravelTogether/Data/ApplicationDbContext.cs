@@ -9,7 +9,7 @@ using TravelTogether.Models;
 
 namespace TravelTogether.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<TtUser>
     {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }

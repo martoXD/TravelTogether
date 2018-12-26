@@ -33,8 +33,18 @@ using Microsoft.AspNetCore.Identity;
 
 #line default
 #line hidden
+#line 5 "D:\softuni\TravelTogether\TravelTogether\Views\_ViewImports.cshtml"
+using X.PagedList;
+
+#line default
+#line hidden
+#line 6 "D:\softuni\TravelTogether\TravelTogether\Views\_ViewImports.cshtml"
+using X.PagedList.Mvc.Core;
+
+#line default
+#line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"583387379a597938339285f5a623245873b0a91c", @"/Views/Shared/Error.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"79caac5113427bfe002f2d8f372e4c36bd997263", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d2d83fd1a6542178c0a656bbc030257f9883046d", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared_Error : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<ErrorViewModel>
     {
         #pragma warning disable 1998

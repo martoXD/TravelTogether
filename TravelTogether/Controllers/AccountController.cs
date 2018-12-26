@@ -19,23 +19,23 @@ namespace TravelTogether.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly SignInManager<TtUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger<AccountController> logger;
         private readonly ApplicationDbContext dbContext;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<TtUser> userManager;
         private readonly IMapper mapper;
         private readonly IHostingEnvironment hostingEnvironment;
-        private readonly IPasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
+        private readonly IPasswordHasher<TtUser> passwordHasher = new PasswordHasher<TtUser>();
 
-        public AccountController(SignInManager<IdentityUser> signInManager,
+        public AccountController(SignInManager<TtUser> signInManager,
             ILogger<AccountController> logger,
             ApplicationDbContext dbContext,
-            UserManager<IdentityUser> userManager,
+            UserManager<TtUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
-            IPasswordHasher<IdentityUser> passwordHasher)
+            IPasswordHasher<TtUser> passwordHasher)
         {
             this.signInManager = signInManager;
             this.dbContext = dbContext;
@@ -54,7 +54,7 @@ namespace TravelTogether.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var user = (TtUser)this.signInManager.UserManager.Users
+            var user = this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.UserName == inputModel.UserName);
 
             if (user != null)
@@ -120,7 +120,7 @@ namespace TravelTogether.Controllers
         [Authorize]
         public IActionResult MyProfile(string id)
         {
-            var user = (TtUser)this.signInManager.UserManager.Users
+            var user = this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.Id == id);
 
             var userProfileViewModel = this.mapper.Map<MyProfileViewModel>(user);
@@ -165,7 +165,7 @@ namespace TravelTogether.Controllers
         [Authorize]
         public IActionResult Edit(string id)
         {
-            var user = (TtUser)this.signInManager.UserManager.Users
+            var user = this.signInManager.UserManager.Users
                 .FirstOrDefault(u => u.Id == id);
 
             var userImages = this.dbContext.Images.Where(img => img.TtUserId == user.Id).ToArray();
@@ -201,7 +201,7 @@ namespace TravelTogether.Controllers
         [Authorize]
         public IActionResult Edit(MyProfileViewModel inputModel, IFormFile profileImage, IFormFile imageInput)
         {
-            var user = (TtUser)this.signInManager.UserManager.Users
+            var user = this.signInManager.UserManager.Users
                .FirstOrDefault(u => u.Id == inputModel.Id);
             
             if (ModelState.IsValid)
@@ -305,6 +305,36 @@ namespace TravelTogether.Controllers
 
                 return this.View(inputModel);
             }
+        }
+
+        [HttpGet]
+        public IActionResult Profile(string id)
+        {
+            var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            var userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);           
+
+            return this.View(userProfileViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddFriend(string memberId, string currentUserId)
+        {
+            var currentUser = this.dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
+            var member = this.dbContext.Users.FirstOrDefault(u => u.Id == memberId);
+
+            var friendShip = new FriendShip()
+            {
+                TtUser = currentUser,
+                Friend = member
+            };
+
+            currentUser.MainUserFriends.Add(friendShip);
+            member.Friends.Add(friendShip);
+            this.dbContext.FriendShips.Add(friendShip);
+            this.dbContext.SaveChanges();
+
+            return Redirect($"/Home/Members?id={currentUser.Id}");
         }
     }
 }

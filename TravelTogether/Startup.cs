@@ -48,7 +48,7 @@ namespace TravelTogether
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(identityOptions =>
+            services.AddIdentity<TtUser, IdentityRole>(identityOptions =>
             {
                 identityOptions.Password.RequireDigit = false;
                 identityOptions.Password.RequireLowercase = false;
@@ -81,9 +81,8 @@ namespace TravelTogether
                 options.EnableForHttps = true;
             });
 
-            services.AddAutoMapper();
-
             // App services
+            services.AddAutoMapper();
             services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser, IdentityRole>>();
             services.AddTransient<ITripsService, TripsService>();
             //services.AddScoped<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();

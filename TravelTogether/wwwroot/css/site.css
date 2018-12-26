@@ -107,6 +107,17 @@ footer {
         color: #9da6b5;
     }
 
+.my_users {
+    margin-right: 20px;
+    font-size: 30px;
+    color: #8d97a8;
+}
+
+    .my_users:hover {
+        cursor: pointer;
+        color: #9da6b5;
+    }
+
 .my_layout_profile_picture{
     width:35px !important;
     height:35px !important;

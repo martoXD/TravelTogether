@@ -1,4 +1,4 @@
-﻿@inject UserManager<IdentityUser> UserManager
+﻿@inject UserManager<TtUser> UserManager
 
 @{
     var currentUser = await UserManager.GetUserAsync(this.User);
@@ -44,7 +44,8 @@
             @if (isAuthenthicated.HasValue && !isAuthenthicated.Value)
             {
                 <div class="nav-item">
-                    <form method="post" asp-action="Login" asp-controller="Account" class="form-inline my-2 my-lg-0">
+                    <form method="post" asp-action="Login" asp-controller="Account"
+                          class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-2" type="text" name="Username" placeholder="Username"
                                aria-label="Username">
                         <input class="form-control mr-2 mt-2 mt-lg-0 mt-md-0 mt-sm-0" type="password" placeholder="Password" name="Password" aria-label="Password">
@@ -64,6 +65,9 @@
             else
             {
                 <div class="nav-item">
+                    <a href="/Home/Members?id=@currentUser.Id">
+                        <i class="fas fa-users my_users"></i>
+                    </a>
                     <a href="/Trips/All">
                         <i class="fas fa-plane my_plane"></i>
                     </a>
@@ -72,12 +76,12 @@
                     @if (ttUser.ProfileImageId != 0)
                     {
                         <img class="ui mini rounded image my_layout_profile_picture"
-                             src="@ttUser.ProfileImageSrc">
+                             src="@ttUser.ProfileImageSrc" />
                     }
                     else
                     {
                         <img class="ui mini rounded image my_layout_profile_picture"
-                             src="~/images/default_icon.jpg">
+                             src="~/images/default_icon.jpg" />
                     }
                 </div>
                 <div class="nav-item ml-lg-2">
