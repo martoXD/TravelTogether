@@ -39,3 +39,4 @@ D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\Profile.g.cshtml.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Home\Members.g.cshtml.cs
+D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\MyTrips.g.cshtml.cs

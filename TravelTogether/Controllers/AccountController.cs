@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TravelTogether.Data;
 using TravelTogether.Models;
 using TravelTogether.ViewModels.Account;
+using TravelTogether.ViewModels.Trips;
 
 namespace TravelTogether.Controllers
 {
@@ -318,6 +319,7 @@ namespace TravelTogether.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddFriend(string memberId, string currentUserId)
         {
             var currentUser = this.dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
@@ -335,6 +337,24 @@ namespace TravelTogether.Controllers
             this.dbContext.SaveChanges();
 
             return Redirect($"/Home/Members?id={currentUser.Id}");
+        }
+
+        [HttpGet]
+        [Authorize]
+        //[Route("trips")]
+        public IActionResult MyTrips(string id)
+        {
+            var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            var myTripsViewModels = new List<MyTripsViewModel>();
+
+            foreach (var tripUser in user.SignedTrips)
+            {
+                var myTripViewModel = this.mapper.Map<MyTripsViewModel>(tripUser.Trip);
+                myTripsViewModels.Add(myTripViewModel);
+            }
+
+            return this.View(myTripsViewModels);
         }
     }
 }
