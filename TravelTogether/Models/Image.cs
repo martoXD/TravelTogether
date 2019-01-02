@@ -10,7 +10,6 @@ namespace TravelTogether.Models
     public class Image
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         public byte[] ImageContent { get; set; }

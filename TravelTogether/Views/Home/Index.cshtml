@@ -45,7 +45,7 @@
                                     @post.CreatedOn.ToString("dd-MMM-yy")
                                 </span>
                             </div>
-                            @if (post.TtUser.ProfileImageId == 0)
+                            @if (post.TtUser.ProfileImageId == null)
                             {
                                 <img class="ui avatar image" src="@post.TtUser.DefaultImageSrc">
                             }
@@ -127,7 +127,7 @@
                                                 @post.CreatedOn.ToString("dd-MMM-yy")
                                             </span>
                                         </div>
-                                        @if (post.TtUser.ProfileImageId == 0)
+                                        @if (post.TtUser.ProfileImageId == null)
                                         {
                                             <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.DefaultImageSrc" />
                                         }
@@ -189,7 +189,7 @@
                                                     {
                                                         <a href="/Account/MyProfile?id=@comment.SenderId"
                                                            class="avatar">
-                                                            @if (comment.Sender.ProfileImageId == 0)
+                                                            @if (comment.Sender.ProfileImageId == null)
                                                             {
                                                                 <img class="iP" src="@comment.Sender.DefaultImageSrc" />
                                                             }
@@ -202,7 +202,7 @@
                                                     else
                                                     {
                                                         <a href="/Account/Profile?id=@comment.SenderId" class="avatar">
-                                                            @if (comment.Sender.ProfileImageId == 0)
+                                                            @if (comment.Sender.ProfileImageId == null)
                                                             {
                                                                 <img class="iP" src="@comment.Sender.DefaultImageSrc" />
                                                             }
@@ -265,7 +265,7 @@
             @foreach (var friendShip in ttUser.MainUserFriends)
             {
                 <div class="item">
-                    @if (friendShip.Friend.ProfileImageId == 0)
+                    @if (friendShip.Friend.ProfileImageId == null)
                     {
                         <img class="ui avatar image" src="@friendShip.Friend.DefaultImageSrc">
                     }
@@ -301,7 +301,7 @@ else
                                     @post.CreatedOn.ToString("dd-MMM-yy")
                                 </span>
                             </div>
-                            @if (post.TtUser.ProfileImageId == 0)
+                            @if (post.TtUser.ProfileImageId == null)
                             {
                                 <img class="ui avatar image" src="@post.TtUser.DefaultImageSrc">
                             }
@@ -355,7 +355,7 @@ else
                                                 @post.CreatedOn.ToString("dd-MMM-yy")
                                             </span>
                                         </div>
-                                        @if (post.TtUser.ProfileImageId == 0)
+                                        @if (post.TtUser.ProfileImageId == null)
                                         {
                                             <img class="ui avatar image my_modal_avatar_image" src="@post.TtUser.DefaultImageSrc" />
                                         }
@@ -395,13 +395,13 @@ else
                                             <div class="ui comments">
                                                 <div class="comment">
                                                     <a class="avatar">
-                                                        @if (comment.Sender.ProfileImageId == 0)
+                                                        @if (comment.Sender.ProfileImageId == null)
                                                         {
-                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc" />
+                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc"/>
                                                         }
                                                         else
                                                         {
-                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc" />
+                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc"/>
                                                         }
                                                     </a>
                                                     <div class="content">
@@ -493,5 +493,5 @@ else
 </div>
 
 @section Scripts{
-    <script src="~/js/index.js"></script>
+    <script type="text/javascript" src="~/js/index.js"></script>
 }

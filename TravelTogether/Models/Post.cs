@@ -16,7 +16,6 @@ namespace TravelTogether.Models
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [StringLength(40)]

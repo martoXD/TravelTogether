@@ -222,7 +222,6 @@ namespace TravelTogether.Controllers
 
                     var image = new Image()
                     {
-                        Id = this.dbContext.Images.Count() + 1,
                         ImageContent = ms.ToArray(),
                         TtUser = user,
                         TtUserId = user.Id
@@ -230,12 +229,14 @@ namespace TravelTogether.Controllers
                     string imageBase64 = Convert.ToBase64String(image.ImageContent);
                     string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
                     image.ImageSource = imageSrc;
+                    this.dbContext.Images.Add(image);
+                    this.dbContext.SaveChanges();
 
                     user.ProfileImageId = image.Id;
                     user.ProfileImageSrc = image.ImageSource;
                     user.Images.Add(image);
 
-                    this.dbContext.Images.Add(image);
+                    this.dbContext.Update(user);
 
                     this.dbContext.Entry(user).State = EntityState.Modified;
                 }
@@ -246,7 +247,6 @@ namespace TravelTogether.Controllers
                     
                     var image = new Image()
                     {
-                        Id = this.dbContext.Images.Count() + 1,
                         ImageContent = ms.ToArray(),
                         TtUser = user,
                         TtUserId = user.Id

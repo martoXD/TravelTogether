@@ -73,7 +73,7 @@
                     </a>
                 </div>
                 <div class="nav-item">
-                    @if (ttUser.ProfileImageId != 0)
+                    @if (ttUser.ProfileImageId != null)
                     {
                         <img class="ui mini rounded image my_layout_profile_picture"
                              src="@ttUser.ProfileImageSrc" />
