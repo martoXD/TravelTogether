@@ -277,7 +277,26 @@
                         <div class="header">@friendShip.Friend.UserName</div>
                     </div>
                     <div class="my_content_friendUser">
-                        <i class="envelope outline icon ml-3"></i>
+                        <div class="my_message_btn" onclick="message('@friendShip.FriendId')">
+                            <i class="envelope outline icon ml-3"></i>
+                        </div>
+                        <div class="popup" id="@friendShip.FriendId">
+                            <form asp-controller="Messages" asp-action="Send">
+                                <div class="content">
+                                    <textarea name="content" placeholder="Your message"></textarea>
+                                </div>
+                                <input type="hidden" value="@currentUser.Id" name="senderId"/>
+                                <input type="hidden" value="@friendShip.FriendId" name="receiverId"/>
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="ui black button">
+                                        Send
+                                    </button>
+                                    <div class="ui black button my_X_btn">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <i class="clone outline icon ml-3"></i>
                         <i class="trash alternate outline icon ml-3"></i>
                     </div>
@@ -397,11 +416,11 @@ else
                                                     <a class="avatar">
                                                         @if (comment.Sender.ProfileImageId == null)
                                                         {
-                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc"/>
+                                                            <img class="iP" src="@comment.Sender.DefaultImageSrc" />
                                                         }
                                                         else
                                                         {
-                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc"/>
+                                                            <img class="iP" src="@comment.Sender.ProfileImageSrc" />
                                                         }
                                                     </a>
                                                     <div class="content">

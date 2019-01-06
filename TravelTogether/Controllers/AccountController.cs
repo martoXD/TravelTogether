@@ -60,7 +60,7 @@ namespace TravelTogether.Controllers
 
             if (user != null)
             {
-                if(passwordHasher.VerifyHashedPassword(user, user.PasswordHash, inputModel.Password) == PasswordVerificationResult.Success)
+                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, inputModel.Password) == PasswordVerificationResult.Success)
                 {
                     this.signInManager.SignInAsync(user, false).Wait();
                 }
@@ -204,7 +204,7 @@ namespace TravelTogether.Controllers
         {
             var user = this.signInManager.UserManager.Users
                .FirstOrDefault(u => u.Id == inputModel.Id);
-            
+
             if (ModelState.IsValid)
             {
                 user.AboutMeDescription = inputModel.AboutMeDescription;
@@ -244,7 +244,7 @@ namespace TravelTogether.Controllers
                 {
                     MemoryStream ms = new MemoryStream();
                     imageInput.OpenReadStream().CopyTo(ms);
-                    
+
                     var image = new Image()
                     {
                         ImageContent = ms.ToArray(),
@@ -271,7 +271,7 @@ namespace TravelTogether.Controllers
             else
             {
                 var imageProfile = this.dbContext.Images.FirstOrDefault(img => img.Id == user.ProfileImageId);
-                
+
                 if (imageProfile != null)
                 {
                     string imageBase64 = Convert.ToBase64String(imageProfile.ImageContent);
@@ -313,7 +313,7 @@ namespace TravelTogether.Controllers
         {
             var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
 
-            var userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);           
+            var userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);
 
             return this.View(userProfileViewModel);
         }
@@ -335,6 +335,27 @@ namespace TravelTogether.Controllers
             member.Friends.Add(friendShip);
             this.dbContext.FriendShips.Add(friendShip);
             this.dbContext.SaveChanges();
+
+            return Redirect($"/Home/Members?id={currentUser.Id}");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult RemoveFriend(string memberId, string currentUserId)
+        {
+            var currentUser = this.dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
+            var member = this.dbContext.Users.FirstOrDefault(u => u.Id == memberId);
+
+            var friendShip = this.dbContext.FriendShips.Where(fsh => fsh.TtUser == currentUser
+                                                                && fsh.Friend == member).FirstOrDefault();
+
+            if (friendShip != null)
+            {
+                currentUser.MainUserFriends.Remove(friendShip);
+                member.Friends.Remove(friendShip);
+                this.dbContext.FriendShips.Remove(friendShip);
+                this.dbContext.SaveChanges();
+            }
 
             return Redirect($"/Home/Members?id={currentUser.Id}");
         }
