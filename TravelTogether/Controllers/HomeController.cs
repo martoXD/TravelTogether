@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using TravelTogether.Data;
 using TravelTogether.Models;
 using TravelTogether.ViewModels.Home;
@@ -73,6 +73,29 @@ namespace TravelTogether.Controllers
             var pagedViewModels = allUsersViewModels.ToPagedList(pageNumber, MAX_ENTITIES_PERPAGE);
 
             return this.View(pagedViewModels.ToList());
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Search(string searchText)
+        {
+            var searchedPosts = new List<Post>();
+            var searchedPostsViewModels = new List<AllPostsViewModel>();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                searchedPosts = this.dbContext.Posts
+                .Where(p => p.Caption.Contains(searchText) || p.TtUser.UserName.Contains(searchText))
+                .ToList();
+
+                foreach (var post in searchedPosts)
+                {
+                    var searchedPostsViewModel = this.mapper.Map<AllPostsViewModel>(post);
+                    searchedPostsViewModels.Add(searchedPostsViewModel);
+                }
+            }
+
+            return this.View("Index", searchedPostsViewModels);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

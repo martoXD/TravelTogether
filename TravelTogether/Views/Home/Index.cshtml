@@ -22,10 +22,14 @@
 {
     <div class="row">
         <div class="col-md-8 col-md-12 d-flex justify-content-center">
-            <div class="ui icon input my_search">
-                <input type="text" placeholder="Search...">
-                <i class="inverted circular search link icon"></i>
-            </div>
+            <form method="get" asp-controller="Home" asp-action="Search">
+                <div class="ui icon input my_search">
+                    <input type="text" placeholder="Search..." name="searchText" />               
+                    <i class="inverted circular search link icon">
+                        <button class="my_search_btn" type="submit"></button>
+                    </i>                   
+                </div>
+            </form>
             <div class="my_addPost_btn ml-4">
                 <a href="#" data-toggle="modal" data-target="#createPost_Modal" class="ui button">
                     + Add New Post
