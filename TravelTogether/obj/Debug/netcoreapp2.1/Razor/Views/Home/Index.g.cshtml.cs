@@ -114,7 +114,7 @@ using X.PagedList.Mvc.Core;
                 WriteLiteral("\r\n    ");
                 EndContext();
                 BeginContext(436, 64, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "6a1c6e8f281748af871f345be644b0f2", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "98114b49bc3345f78aebda6f2548f3ee", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -134,7 +134,7 @@ using X.PagedList.Mvc.Core;
                 WriteLiteral("\r\n    ");
                 EndContext();
                 BeginContext(506, 64, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "fadcec249df74b36a92c58d3beb5d865", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "47e11f92b523439d984569c4ce472b07", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -168,7 +168,7 @@ using X.PagedList.Mvc.Core;
             WriteLiteral("    <div class=\"row\">\r\n        <div class=\"col-md-8 col-md-12 d-flex justify-content-center\">\r\n            ");
             EndContext();
             BeginContext(746, 458, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "36fec2d77b7248738f8ace11e963b848", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "564af0b7728b4734aae9e4e0027db0a0", async() => {
                 BeginContext(812, 385, true);
                 WriteLiteral(@"
                 <div class=""ui icon input my_search"">
@@ -1180,7 +1180,7 @@ WriteAttributeValue("", 17093, friendShip.FriendId, 17093, 20, false);
             WriteLiteral(">\r\n                            ");
             EndContext();
             BeginContext(17145, 969, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a029e967ff01434f821f9751d118beca", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "fed5f45181d749a7a543c3e30a87924c", async() => {
                 BeginContext(17195, 250, true);
                 WriteLiteral("\r\n                                <div class=\"content\">\r\n                                    <textarea name=\"content\" placeholder=\"Your message\"></textarea>\r\n                                </div>\r\n                                <input type=\"hidden\"");
                 EndContext();
@@ -1804,7 +1804,7 @@ WriteAttributeValue("", 25390, comment.Sender.ProfileImageSrc, 25390, 31, false)
                 ");
             EndContext();
             BeginContext(27929, 1877, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7de8aaf0ae36438ea3862d4669dfda60", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "771702826e3b4403aa113bdde11a9282", async() => {
                 BeginContext(28046, 1220, true);
                 WriteLiteral(@"
                     <div class=""my_addPost_container"">
@@ -1889,7 +1889,7 @@ WriteAttributeValue("", 29400, currentUser.Id, 29400, 15, false);
                 WriteLiteral("\r\n    ");
                 EndContext();
                 BeginContext(29889, 60, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "785344673c2247c3a08c358bd21b91e1", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "56ed5b3befc045a79c847c7babb92fcf", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
