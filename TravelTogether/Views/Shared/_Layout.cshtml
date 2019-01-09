@@ -103,8 +103,14 @@
                                 My Trips
                                 <i class="briefcase icon"></i>
                             </a>
-                            <a href="#" class="font-weight-bold">Friends <i class="fas fa-users"></i></a>
-                            <a href="#" class="font-weight-bold">Mesages <i class="fas fa-envelope"></i></a>
+                            <a href="/Account/Friends?id=@currentUser.Id" class="font-weight-bold">
+                                Friends
+                                <i class="fas fa-users"></i>
+                            </a>
+                            <a href="/Account/Messages?id=@currentUser.Id" class="font-weight-bold">
+                                Mesages
+                                <i class="fas fa-envelope"></i>
+                            </a>
                             <hr />
                             <a href="/Account/Logout" class="font-weight-bold">
                                 Logout

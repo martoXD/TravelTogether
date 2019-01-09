@@ -285,8 +285,8 @@
                                 <div class="content">
                                     <textarea name="content" placeholder="Your message"></textarea>
                                 </div>
-                                <input type="hidden" value="@currentUser.Id" name="senderId"/>
-                                <input type="hidden" value="@friendShip.FriendId" name="receiverId"/>
+                                <input type="hidden" value="@currentUser.Id" name="senderId" />
+                                <input type="hidden" value="@friendShip.FriendId" name="receiverId" />
                                 <div class="d-flex justify-content-between">
                                     <button type="submit" class="ui black button">
                                         Send
@@ -297,8 +297,12 @@
                                 </div>
                             </form>
                         </div>
-                        <i class="clone outline icon ml-3"></i>
-                        <i class="trash alternate outline icon ml-3"></i>
+                        <div onclick="viewProfile('@friendShip.FriendId')">
+                            <i class="clone outline icon ml-3"></i>
+                        </div>
+                        <div onclick="removeFriend('@friendShip.FriendId', '@friendShip.TtUserId')">
+                            <i class="trash alternate outline icon ml-3"></i>
+                        </div>
                     </div>
                 </div>
             }

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TravelTogether.Data;
 using TravelTogether.Models;
 using TravelTogether.ViewModels.Account;
+using TravelTogether.ViewModels.Message;
 using TravelTogether.ViewModels.Trips;
 
 namespace TravelTogether.Controllers
@@ -314,8 +315,18 @@ namespace TravelTogether.Controllers
             var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
 
             var userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);
+            
+            return this.View("Profile", userProfileViewModel);
+        }
 
-            return this.View(userProfileViewModel);
+        [HttpGet]
+        public IActionResult ViewProfile(string id)
+        {
+            var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            var userProfileViewModel = this.mapper.Map<UserProfileViewModel>(user);
+            
+            return Json(new { result = "Redirect", url = $"https://localhost:44390/Account/Profile?id={user.Id}" });
         }
 
         [HttpPost]
@@ -360,6 +371,27 @@ namespace TravelTogether.Controllers
             return Redirect($"/Home/Members?id={currentUser.Id}");
         }
 
+        [HttpPost]
+        [Authorize]
+        public IActionResult RemoveFriendFromIndex(string memberId, string currentUserId)
+        {
+            var currentUser = this.dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
+            var member = this.dbContext.Users.FirstOrDefault(u => u.Id == memberId);
+
+            var friendShip = this.dbContext.FriendShips.Where(fsh => fsh.TtUser == currentUser
+                                                                && fsh.Friend == member).FirstOrDefault();
+
+            if (friendShip != null)
+            {
+                currentUser.MainUserFriends.Remove(friendShip);
+                member.Friends.Remove(friendShip);
+                this.dbContext.FriendShips.Remove(friendShip);
+                this.dbContext.SaveChanges();
+            }
+
+            return Json(new { result = "Redirect", url = $"https://localhost:44390/Home/Index" });
+        }
+
         [HttpGet]
         [Authorize]
         //[Route("trips")]
@@ -376,6 +408,51 @@ namespace TravelTogether.Controllers
             }
 
             return this.View(myTripsViewModels);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Friends(string id)
+        {
+            var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            var friendsViewModels = new List<FriendsViewModel>();
+
+            foreach (var friendShip in user.MainUserFriends)
+            {
+                var friendsViewModel = this.mapper.Map<FriendsViewModel>(friendShip.Friend);
+                friendsViewModels.Add(friendsViewModel);
+            }
+
+            return this.View("Friends", friendsViewModels);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Messages(string id)
+        {
+            var user = this.dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            var sentMessageViewModels = new List<SentMessageViewModel>();
+            var receivedMessageViewModels = new List<ReceivedMessageViewModel>();
+
+            var allMessagesViewModel = new AllMessagesViewModel();
+
+            foreach (var message in user.SentMessages)
+            {
+                var sentMessageViewModel = this.mapper.Map<SentMessageViewModel>(message);
+                sentMessageViewModels.Add(sentMessageViewModel);
+            }
+            foreach (var message in user.ReceivedMessages)
+            {
+                var receivedMessageViewModel = this.mapper.Map<ReceivedMessageViewModel>(message);
+                receivedMessageViewModels.Add(receivedMessageViewModel);
+            }
+
+            allMessagesViewModel.ReceivedMessages = receivedMessageViewModels;
+            allMessagesViewModel.SentMessages = sentMessageViewModels;
+
+            return this.View("Messages", allMessagesViewModel);
         }
     }
 }
