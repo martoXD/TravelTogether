@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -19,13 +20,16 @@ namespace TravelTogether.Controllers
 
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly UserManager<TtUser> userManager;
 
         public HomeController(
             ApplicationDbContext dbContext,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<TtUser> userManager)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -77,7 +81,7 @@ namespace TravelTogether.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Search(string searchText)
+        public IActionResult SearchPosts(string searchText)
         {
             var searchedPosts = new List<Post>();
             var searchedPostsViewModels = new List<AllPostsViewModel>();
@@ -93,9 +97,38 @@ namespace TravelTogether.Controllers
                     var searchedPostsViewModel = this.mapper.Map<AllPostsViewModel>(post);
                     searchedPostsViewModels.Add(searchedPostsViewModel);
                 }
+
+                return this.View("Index", searchedPostsViewModels);
             }
 
-            return this.View("Index", searchedPostsViewModels);
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult SearchMembers(string searchText)
+        {
+            var searchedMembers = new List<TtUser>();
+            var searchedMembersViewModels = new List<AllUsersViewModel>();
+
+            var currentUserId = this.userManager.GetUserId(this.User);
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                searchedMembers = this.dbContext.Users
+                .Where(u => u.FirstName.Contains(searchText) || u.LastName.Contains(searchText))
+                .ToList();
+
+                foreach (var member in searchedMembers)
+                {
+                    var searchedMemberViewModel = this.mapper.Map<AllUsersViewModel>(member);
+                    searchedMembersViewModels.Add(searchedMemberViewModel);
+                }
+
+                return this.View($"Members", searchedMembersViewModels);
+            }
+
+            return this.Redirect($"/Home/Members?id={currentUserId}");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
