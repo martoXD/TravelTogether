@@ -1,0 +1,10 @@
+﻿
+.my_creator_img{
+    display: inline-block !important;
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.my_modal {
+    background-color: #547e8e;
+}

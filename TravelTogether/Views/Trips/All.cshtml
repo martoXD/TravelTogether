@@ -1,0 +1,123 @@
+﻿@model List<AllTripsViewModel>
+
+@inject UserManager<TtUser> UserManager
+
+@{
+    ViewData["Title"] = "All Trips";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = await UserManager.GetUserAsync(this.User);
+    bool? isAuthenthicated = false;
+    if (currentUser != null)
+    {
+        isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    }
+}
+
+@section Links
+    {
+    <link rel="stylesheet" type="text/css" href="~/css/allTrips.css" />
+}
+<div class="row">
+    <div class="col-md-12 d-flex justify-content-center">
+        <form method="get" asp-controller="Trips" asp-action="Search">
+            <div class="ui icon input my_search">
+                <input type="text" placeholder="Search..." name="searchText" />
+                <i class="inverted circular search link icon">
+                    <button class="my_search_btn" type="submit"></button>
+                </i>
+            </div>
+        </form>
+        <div class="my_addTrip_btn ml-4">
+            <a href="#" data-toggle="modal" data-target="#createTrip_Modal" class="ui button">
+                + Add New Trip
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    @foreach (var trip in Model)
+    {
+        <div class="category-section col-xs-12 col-sm-6 col-md-4">
+            <div class="image-card">
+                <div class="image-card-content">
+                    <div class="card-thumb">
+                        <img class="my_image_trip" src="@trip.Images.First().ImageSource" alt="">
+                    </div>
+                    <div class="text-details">
+                        <h2>@trip.Country/@trip.City</h2>
+                        <p>By @trip.Creator.FirstName @trip.Creator.LastName</p>
+                        @if (trip.SignedUsers.Any(tu => tu.TtUserId == currentUser.Id))
+                        {
+                        }
+                        else
+                        {
+                            <form method="post" asp-controller="Trips" asp-action="Join">
+                                <input type="hidden" value="@currentUser.Id" name="userId" />
+                                <input type="hidden" value="@trip.Id" name="tripId" />
+                                <button type="submit">
+                                    <i class="fa fa-fw fa-play"></i>
+                                    Take a tour
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="my_block"></div>
+
+@*AddTripModal*@
+<div class="modal fade" id="createTrip_Modal">
+    <div class="modal-dialog">
+        <div class="modal-content my_modal">
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <form id="my_addtrip_modal_form" asp-controller="Trips" asp-action="Add" method="post" enctype="multipart/form-data">
+                    <div class="my_addTrip_container">
+                        <h1 style="text-align: center;">Add Trip</h1>
+                        <hr class="my_hr_addTripModal" />
+
+                        <label for="country"><b>Country</b></label>
+                        <input id="country" class="my_input_AddTripModal" type="text" placeholder="Country.." name="country" required />
+
+                        <label for="city"><b>City</b></label>
+                        <input id="city" class="my_input_AddTripModal" type="text" placeholder="City.."
+                               name="city" required />
+
+                        <label for="imageBrowes"><b>Image</b></label>
+                        <input type="file" name="inputImage" id="imageBrowes" class="ui inverted grey button my_input_AddTripModal" required />
+
+                        <hr class="my_hr_addTripModal" />
+
+                        <div id="imgPreview" class="thumbnail" style="display:none">
+                            <img class="img-responsive" id="targetImg" />
+                            <div class="caption">
+                                <a class="my_trash_addTripModal" href="#" onclick="ClearPreview()">
+                                    <i class="trash icon"></i>
+                                </a>
+                                <span id="description"></span>
+                            </div>
+                        </div>
+                        @if (currentUser != null)
+                        {
+                            <input type="hidden" value="@currentUser.Id" name="userId" />
+                        }
+                        <div class="d-flex justify-content-around">
+                            <button type="submit" id="btnUpload" class="ui black button my_addPostModal_btn mt-4">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript" src="~/js/allTrips.js"></script>
+}

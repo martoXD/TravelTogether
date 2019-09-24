@@ -1,0 +1,156 @@
+﻿
+.my_addTrip_btn{
+    margin-top:25px;
+}
+
+.my_search {
+    margin-top: 25px;
+}
+
+/* Full-width input fields */
+.my_input_AddTripModal[type=text] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+    .my_input_AddTripModal[type=text]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+.my_hr_addTripModal {
+    border: 1.2px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Add padding to container elements */
+.my_addTrip_container {
+    padding: 16px;
+}
+
+#targetImg {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    left: 110px;
+}
+
+#description {
+    position: relative;
+    left: 85px;
+}
+
+.my_trash_addTripModal {
+    color: #000000;
+    position: relative;
+    left: 350px;
+}
+
+    .my_trash_addTripModal:hover {
+        color: #1f1d1d;
+    }
+
+.my_modal {
+    background-color: #547e8e;
+}
+
+.image-card {
+    margin: 5px 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+    .image-card .card-thumb {
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+        .image-card .card-thumb > img {
+            display: block;
+            width: 100%;
+            height: 255px;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            transition: -webkit-transform .7s;
+            transition: transform .7s;
+            transition: transform .7s, -webkit-transform .7s;
+        }
+
+        .image-card .card-thumb:hover img {
+            -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+        }
+
+        .image-card .card-thumb:before {
+            content: "";
+            z-index: 1;
+            background: #009688;
+            opacity: .25;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+    .image-card .text-details {
+        display: inline-block;
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-align: center;
+        z-index: 2;
+        padding-top: 20%;
+    }
+
+        .image-card .text-details h2, .image-card .text-details p {
+            text-align: center;
+            color: white;
+        }
+
+        .image-card .text-details p {
+            opacity: 1;
+            transition: opacity .5s;
+        }
+
+        .image-card .text-details button {
+            border: 1px solid white;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: white;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.35);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+    .image-card:hover p {
+        opacity: 0;
+    }
+
+    .image-card:hover button {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+.my_search_btn {
+    opacity: 0;
+    width: inherit;
+    height: 34px;
+    position: inherit;
+    top: -4px;
+    left: 0px;
+    cursor: pointer;
+}
+
+.my_block {
+    width: 100%;
+    height: 90px;
+}

@@ -1,0 +1,29 @@
+﻿
+.my_search {
+    margin-top: 25px;
+}
+
+.my_profileImg_member{
+    width: 100% !important;
+    height: 140px !important;
+}
+
+.my_card_member {
+    background-color: #547e8e !important;
+    margin-top: 40px !important;
+}
+
+.my_search_btn {
+    opacity: 0;
+    width: inherit;
+    height: 34px;
+    position: inherit;
+    top: -4px;
+    left: 0px;
+    cursor: pointer;
+}
+
+.my_block {
+    width: 100%;
+    height: 90px;
+}

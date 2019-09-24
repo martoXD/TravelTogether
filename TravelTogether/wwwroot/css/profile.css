@@ -1,0 +1,15 @@
+﻿
+.my_profile_row {
+    padding: 5%;
+    margin-top: 20px;
+}
+
+    .my_profile_row .details {
+        border-left: 3px solid #ded4da;
+        font-size: 23px;
+    }
+
+        .my_profile_row .details p {
+            font-size: 15px;
+            font-weight: bold;
+        }

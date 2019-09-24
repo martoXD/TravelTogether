@@ -42,4 +42,3 @@ D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Hom
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\MyTrips.g.cshtml.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\Friends.g.cshtml.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\Messages.g.cshtml.cs
-D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.csprojAssemblyReference.cache

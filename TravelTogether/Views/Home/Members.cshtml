@@ -1,0 +1,100 @@
+﻿@model List<TravelTogether.ViewModels.Home.AllUsersViewModel>
+
+@inject UserManager<TtUser> UserManager
+
+@{
+    ViewData["Title"] = "Members";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var currentUser = await UserManager.GetUserAsync(this.User);
+    var ttUser = (TtUser)currentUser;
+    bool? isAuthenthicated = false;
+    if (currentUser != null)
+    {
+        isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    }
+}
+
+@section Links{
+    <link rel="stylesheet" type="text/css" href="~/css/members.css" />
+}
+
+<div class="row">
+    <div class="col-md-12 d-flex justify-content-center">
+        <form method="get" asp-controller="Home" asp-action="SearchMembers">
+            <div class="ui icon input my_search">
+                <input type="text" placeholder="Search..." name="searchText" />
+                <i class="inverted circular search link icon">
+                    <button class="my_search_btn" type="submit"></button>
+                </i>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var member in Model)
+    {
+        <div class="col-md-2">
+            <div class="ui link cards">
+                <div class="card my_card_member">
+                    <div class="image">
+                        @if (member.ProfileImageId == null)
+                        {
+                            <img class="my_profileImg_member" src="@member.DefaultImageSrc">
+                        }
+                        else
+                        {
+                            <img class="my_profileImg_member" src="@member.ProfileImageSrc">
+                        }
+                    </div>
+                    <div class="content">
+                        <div class="header">@member.FirstName @member.LastName</div>
+
+                        @if (member.AboutMeDescription == null)
+                        {
+                            <div class="description">
+                                - - Empty - -
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="description">
+                                @member.AboutMeDescription
+                            </div>
+                        }
+                    </div>
+                    <div class="extra content">
+                        <div class="right floated">
+                            @if (currentUser.MainUserFriends.Any(fp => fp.FriendId == member.Id))
+                            {
+                                <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                    <input type="hidden" value="@member.Id" name="memberId" />
+                                    <input type="hidden" value="@currentUser.Id" name="currentUserId" />
+                                    <button type="submit" class="ui button">Remove Friend</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Account" asp-action="AddFriend" method="post">
+                                    <input type="hidden" value="@member.Id" name="memberId" />
+                                    <input type="hidden" value="@currentUser.Id" name="currentUserId" />
+                                    <button type="submit" class="ui button">Add Friend</button>
+                                </form>
+                            }
+                        </div>
+                        <span>
+                            <i class="user icon ml-1"></i>
+                            @member.MainUserFriends.Count() Friends
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="my_block"></div>
+
+@section Scripts{
+    <script type="text/javascript" src="~/js/members.js"></script>
+}
