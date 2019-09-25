@@ -43,3 +43,12 @@ D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Acc
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\Friends.g.cshtml.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\Razor\Views\Account\Messages.g.cshtml.cs
 D:\softuni\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.csprojAssemblyReference.cache
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.csprojAssemblyReference.cache
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.csproj.CoreCompileInputs.cache
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.RazorAssemblyInfo.cache
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.RazorAssemblyInfo.cs
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.AssemblyInfoInputs.cache
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.AssemblyInfo.cs
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.dll
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.pdb
