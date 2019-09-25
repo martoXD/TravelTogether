@@ -1,0 +1,36 @@
+﻿@model List<TravelTogether.ViewModels.Account.FriendsViewModel>
+
+@{
+    ViewData["Title"] = "Friends";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row mt-4">
+    <div class="col-md-12">
+
+        @foreach (var friend in Model)
+        {
+            <div class="ui massive horizontal divided list ml-4">
+                <div class="item">
+                    @if (friend.ProfileImageId == null)
+                    {
+                        <img class="ui avatar image" src="@friend.DefaultImageSrc">
+                    }
+                    else
+                    {
+                        <img class="ui avatar image" src="@friend.ProfileImageSrc">
+                    }
+                    <div class="content">
+                        <div class="header" style="color:rgba(255, 255, 255, 0.87) !important;">
+                            @friend.UserName
+                        </div>
+                    </div>
+                    <button class="ui button">
+                        Contact
+                    </button>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+

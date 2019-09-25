@@ -1,0 +1,74 @@
+﻿@model TravelTogether.ViewModels.Message.AllMessagesViewModel
+
+@{
+    ViewData["Title"] = "Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Links{
+    <link rel="stylesheet" type="text/css" href="~/css/messages.css" />
+}
+
+<div class="row">
+    <div class="d-flex justify-content-center col-md-12">
+        <div class="col-md-3">
+            <h1 class="mt-4" style="color:aliceblue">Received Messages</h1>
+            @foreach (var message in Model.ReceivedMessages)
+            {
+                <div class="ui raised card my_message_card">
+                    <div class="content">
+                        <div class="description">
+                            <p>@message.MessageContent</p>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="right floated author">
+                            @if (message.Sender.ProfileImageId == null)
+                            {
+                                <img class="ui avatar image" src="@message.Sender.DefaultImageSrc">
+                                @message.Sender.UserName
+                            }
+                            else
+                            {
+                                <img class="ui avatar image" src="@message.Sender.ProfileImageSrc">
+                                @message.Sender.UserName
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-3">
+            <h1 class="mt-4" style="color:aliceblue">Sent Messages</h1>
+            @foreach (var message in Model.SentMessages)
+            {
+                <div class="ui raised card my_message_card">
+                    <div class="content">
+                        <div class="description">
+                            <p>@message.MessageContent</p>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="right floated author">
+                            @if (message.Sender.ProfileImageId == null)
+                            {
+                                <img class="ui avatar image" src="@message.Sender.DefaultImageSrc">
+                                @message.Sender.UserName
+                            }
+                            else
+                            {
+                                <img class="ui avatar image" src="@message.Sender.ProfileImageSrc">
+                                @message.Sender.UserName
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="my_block"></div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" src="~/js/messages.js"></script>
+}

@@ -1,0 +1,189 @@
+﻿@model TravelTogether.ViewModels.Account.MyProfileViewModel
+
+@inject UserManager<TtUser> UserManager
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = await UserManager.GetUserAsync(this.User);
+    var ttUser = (TtUser)currentUser;
+    bool? isAuthenthicated = false;
+    if (currentUser != null)
+    {
+        isAuthenthicated = this.User?.Identity?.IsAuthenticated;
+    }
+}
+
+@section Links{
+    <link rel="stylesheet" type="text/css" href="~/css/myProfile.css" />
+}
+
+<div class="container emp-profile">
+    <form method="post" asp-controller="Account" asp-action="Edit" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img">
+                        @if (Model.ProfileImageId == null)
+                        {
+                            <div class="profile-img">
+                                <img src="~/images/default_icon.jpg" alt="" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="profile-img">
+                                <img src="@Model.ProfileImageSrc" alt="" />
+                            </div>
+                        }
+                        <div class="file btn btn-lg btn-primary">
+                            Change Photo
+                            <input type="file" name="profileImage" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 my_profile_headers">
+                    <div class="profile-head">
+                        <h5>
+                            @Model.FirstName @Model.LastName
+                        </h5>
+                        <div class="my_aboutMeDescription_profile">
+                            <h3>About me</h3>
+                            <textarea class="form-control my_aboutMe_textarea" asp-for="AboutMeDescription" placeholder="Description">@Model.AboutMeDescription</textarea>
+                            <span class="text-danger my_error_label_aboutMe"
+                                  asp-validation-for="AboutMeDescription">
+                            </span>
+                        </div>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Images</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" class="profile-edit-btn" onclick="validationOn()" name="btnAddMore" value="Save" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">Username</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control" asp-for="UserName"
+                                           style="width:50% !important" />
+                                    <span class="text-danger my_error_label"
+                                          asp-validation-for="UserName">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">First Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control mt-2" asp-for="FirstName"
+                                           style="width:50% !important" value="@Model.FirstName" />
+                                    <span class="text-danger my_error_label mt-2"
+                                          asp-validation-for="FirstName">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">Last Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control mt-2" asp-for="LastName"
+                                           style="width:50% !important" value="@Model.LastName" />
+                                    <span class="text-danger my_error_label mt-2"
+                                          asp-validation-for="LastName">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">Country</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control mt-2" asp-for="Country"
+                                           style="width:50% !important" value="@Model.Country" />
+                                    <span class="text-danger my_error_label mt-2"
+                                          asp-validation-for="Country">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">City</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control mt-2" asp-for="City"
+                                           style="width:50% !important" value="@Model.City" />
+                                    <span class="text-danger my_error_label mt-2"
+                                          asp-validation-for="City">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">Age</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control mt-2" asp-for="Age"
+                                           style="width:50% !important" value="@Model.Age" />
+                                    <span class="text-danger my_error_label mt-2"
+                                          asp-validation-for="Age">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="my_label_myProfile">Gender</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mt-2">@Model.Gender.ToString()</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <input class="ui inverted grey button" type="file" name="imageInput" />
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                @if (Model.Images != null)
+                                {
+                                    @foreach (var image in Model.Images)
+                                    {
+                                        <div class="col-md-2">
+                                            <img class="ui tiny image my_userImages" src="@image.ImageSource">
+                                            <a class="ui negative basic button d-flex justify-content-center ml-1 mt-2 my_deleteImg_button" onclick="removeImg(@image.Id, '@currentUser.Id')">
+                                                <i class="trash alternate outline icon my_deleteImg_icon"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" src="~/js/edit.js"></script>
+}
