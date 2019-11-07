@@ -14,17 +14,17 @@ var like = function (postId, userId) {
         data: serializedData,
         success: function (post) {
             var postData = jQuery.parseJSON(post);
+            console.log(postData);
+            $('.likes').text(postData.PostLikes + ' likes');
+            var a = document.getElementById("like_btn");
+            a.setAttribute("id", "dislike_btn");
+            a.setAttribute("class", "my_dislike_btn");
             var postId = postData.PostId;
             var userId = postData.UserId;
             var likeId = postData.LikeId;
-            console.log(postData);
-            $('.likes_' + postId).text(postData.PostLikes + ' likes');
-            var elements = document.getElementsByClassName("my_like_btn_" + postId);       
-            Array.from(elements).forEach(function (e) {
-                e.setAttribute("class", "my_dislike_btn_" + postId);
-                e.setAttribute("onclick", `dislike('${postId}', '${userId}', '${likeId}')`);
-            });
-            
+            a.setAttribute("onclick", `dislike('${postId}', '${userId}', '${likeId}')`);
+            //$('#like_btn').setAttribute('class', 'my_dislike_btn');
+            //$('#like_btn').setAttribute('onclick', 'dislike(@post.Id, \'@currentUser.Id\', @likeId)');
             //window.location.reload();
             //$("#loaderDiv").hide();
             //$("#post_Modal").modal("hide");
@@ -48,16 +48,16 @@ var dislike = function (postId, userId, likeId) {
         data: serializedData,
         success: function (post) {
             var postData = jQuery.parseJSON(post);
+            console.log(postData);
+            $('.likes').text(postData.PostLikes + ' likes');
+            var a = document.getElementById("dislike_btn");
+            a.setAttribute("id", "like_btn");
+            a.setAttribute("class", "my_like_btn");
             var postId = postData.PostId;
             var userId = postData.UserId;
-            console.log(postData);
-            $('.likes_' + postId).text(postData.PostLikes + ' likes');
-            var elements = document.getElementsByClassName("my_dislike_btn_" + postId);
-            Array.from(elements).forEach(function (e) {
-                e.setAttribute("class", "my_like_btn_" + postId);
-                e.setAttribute("onclick", `like('${postId}', '${userId}')`);
-            });
-            
+            a.setAttribute("onclick", `like('${postId}', '${userId}')`);
+            //$('#dislike_btn').setAttribute('class', 'my_like_btn');
+            //$('#dislike_btn').setAttribute('onclick', 'like(@post.Id, \'@currentUser.Id\')');
             //window.location.reload();
             //$("#loaderDiv").hide();
             //$("#post_Modal").modal("hide");

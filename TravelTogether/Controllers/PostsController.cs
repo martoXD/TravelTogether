@@ -94,7 +94,7 @@ namespace TravelTogether.Controllers
                     user.Comments.Add(comment);
                     post.Comments.Add(comment);
                     await this.dbContext.Comments.AddAsync(comment);
-                    
+
                     await this.dbContext.SaveChangesAsync();
                 }
             }
@@ -128,12 +128,13 @@ namespace TravelTogether.Controllers
         {
             var post = this.dbContext.Posts.FirstOrDefault(p => p.Id == post_Id);
             var user = (TtUser)this.dbContext.Users.FirstOrDefault(u => u.Id == user_Id);
+            var like = new Like();
 
             if (ModelState.IsValid)
             {
                 if (post_Id != null && user_Id != null)
                 {
-                    var like = new Like
+                    like = new Like
                     {
                         PostId = post.Id,
                         Post = post,
@@ -151,8 +152,25 @@ namespace TravelTogether.Controllers
                     this.dbContext.SaveChanges();
                 }
             }
+            var postId = post.Id;
+            var postLikes = post.Likes.Count;
+            var userId = user.Id;
+            var likeId = like.Id;
 
-            return new JsonResult(post);
+            var serializedPost = JsonConvert.SerializeObject(
+                                new
+                                {
+                                    PostId = postId,
+                                    PostLikes = postLikes,
+                                    UserId = userId,
+                                    LikeId = likeId
+                                },
+                                Formatting.Indented,
+                                new JsonSerializerSettings
+                                {
+                                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                                });
+            return Json(serializedPost);
         }
 
         [HttpPost]
@@ -179,8 +197,23 @@ namespace TravelTogether.Controllers
                     this.dbContext.SaveChanges();
                 }
             }
+            var postId = post.Id;
+            var userId = user.Id;
+            var postLikes = post.Likes.Count;
 
-            return new JsonResult(post);
+            var serializedPost = JsonConvert.SerializeObject(
+                                new
+                                {
+                                    PostId = postId,
+                                    PostLikes = postLikes,
+                                    UserId = userId,
+                                },
+                                Formatting.Indented,
+                                new JsonSerializerSettings
+                                {
+                                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                                });
+            return Json(serializedPost);
         }
     }
 }

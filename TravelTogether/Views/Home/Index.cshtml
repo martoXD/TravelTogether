@@ -74,26 +74,19 @@
                                     {
                                         var likeId = post.Likes.FirstOrDefault(l => l.PostId == post.Id
                                         && l.TtUserId == currentUser.Id).Id;
-                                        <a class="my_dislike_btn"
-                                           onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
+                                        <a class="my_dislike_btn_@post.Id"
+                                           onclick="dislike('@post.Id', '@currentUser.Id', '@likeId')">
                                             <i class="heart outline like icon"></i>
                                         </a>
                                     }
                                 }
                                 else
                                 {
-                                    <a class="my_like_btn" onclick="like(@post.Id, '@currentUser.Id')">
+                                    <a class="my_like_btn_@post.Id" onclick="like('@post.Id', '@currentUser.Id')">
                                         <i class="heart outline like icon"></i>
                                     </a>
                                 }
-                                @if (post.Likes.Count() == 1)
-                                {
-                                    <span>@post.Likes.Count() like</span>
-                                }
-                                else
-                                {
-                                    <span>@post.Likes.Count() likes</span>
-                                }
+                                <span class="likes_@post.Id">@post.Likes.Count() likes</span>
                             </span>
                             <i class="comment icon"></i>
                             <span id="postID-@post.Id">@post.Comments.Count() comments</span>
@@ -159,7 +152,7 @@
                                                     var likeId = post.Likes
                                                         .FirstOrDefault(l => l.PostId == post.Id
                                                         && l.TtUserId == currentUser.Id).Id;
-                                                    <a class="my_dislike_btn"
+                                                    <a class="my_dislike_btn_@post.Id"
                                                        onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
                                                         <i class="heart outline like icon"></i>
                                                     </a>
@@ -167,19 +160,12 @@
                                             }
                                             else
                                             {
-                                                <a class="my_like_btn"
+                                                <a class="my_like_btn_@post.Id"
                                                    onclick="like(@post.Id, '@currentUser.Id')">
                                                     <i class="heart outline like icon"></i>
                                                 </a>
                                             }
-                                            @if (post.Likes.Count() == 1)
-                                            {
-                                                <span>@post.Likes.Count() like</span>
-                                            }
-                                            else
-                                            {
-                                                <span>@post.Likes.Count() likes</span>
-                                            }
+                                            <span class="likes_@post.Id">@post.Likes.Count() likes</span>
                                         </span>
                                         <i class="comment icon"></i>
                                         <span id="postID-@post.Id">@post.Comments.Count() comments</span>

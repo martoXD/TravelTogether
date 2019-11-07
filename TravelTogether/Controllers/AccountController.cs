@@ -83,7 +83,7 @@ namespace TravelTogether.Controllers
             {
                 var user = this.mapper.Map<TtUser>(inputModel);
 
-                string imgPath = @"D:/softuni/TravelTogether/TravelTogether/wwwroot/images/default_icon.jpg";
+                string imgPath = @"C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\wwwroot\images\default_icon.jpg";
 
                 byte[] byteData = System.IO.File.ReadAllBytes(imgPath);
 
@@ -283,7 +283,7 @@ namespace TravelTogether.Controllers
                 }
                 else
                 {
-                    string imgPath = @"D:/softuni/TravelTogether/TravelTogether/wwwroot/images/default_icon.jpg";
+                    string imgPath = @"C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\wwwroot\images\default_icon.jpg";
 
                     byte[] byteData = System.IO.File.ReadAllBytes(imgPath);
 
