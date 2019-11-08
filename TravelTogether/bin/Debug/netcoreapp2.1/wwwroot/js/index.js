@@ -14,17 +14,18 @@ var like = function (postId, userId) {
         data: serializedData,
         success: function (post) {
             var postData = jQuery.parseJSON(post);
-            console.log(postData);
-            $('.likes').text(postData.PostLikes + ' likes');
-            var a = document.getElementById("like_btn");
-            a.setAttribute("id", "dislike_btn");
-            a.setAttribute("class", "my_dislike_btn");
             var postId = postData.PostId;
             var userId = postData.UserId;
             var likeId = postData.LikeId;
-            a.setAttribute("onclick", `dislike('${postId}', '${userId}', '${likeId}')`);
-            //$('#like_btn').setAttribute('class', 'my_dislike_btn');
-            //$('#like_btn').setAttribute('onclick', 'dislike(@post.Id, \'@currentUser.Id\', @likeId)');
+            console.log(postData);
+            $('.likes_' + postId).text(postData.PostLikes + ' likes');
+            var elements = document.getElementsByClassName("my_like_btn_" + postId);
+            Array.from(elements).forEach(function (e) {
+                e.children[0].setAttribute("id", "like_icon");
+                e.setAttribute("class", "my_dislike_btn_" + postId);
+                e.setAttribute("onclick", `dislike('${postId}', '${userId}', '${likeId}')`);
+            });
+
             //window.location.reload();
             //$("#loaderDiv").hide();
             //$("#post_Modal").modal("hide");
@@ -48,16 +49,17 @@ var dislike = function (postId, userId, likeId) {
         data: serializedData,
         success: function (post) {
             var postData = jQuery.parseJSON(post);
-            console.log(postData);
-            $('.likes').text(postData.PostLikes + ' likes');
-            var a = document.getElementById("dislike_btn");
-            a.setAttribute("id", "like_btn");
-            a.setAttribute("class", "my_like_btn");
             var postId = postData.PostId;
             var userId = postData.UserId;
-            a.setAttribute("onclick", `like('${postId}', '${userId}')`);
-            //$('#dislike_btn').setAttribute('class', 'my_like_btn');
-            //$('#dislike_btn').setAttribute('onclick', 'like(@post.Id, \'@currentUser.Id\')');
+            console.log(postData);
+            $('.likes_' + postId).text(postData.PostLikes + ' likes');
+            var elements = document.getElementsByClassName("my_dislike_btn_" + postId);
+            Array.from(elements).forEach(function (e) {
+                e.children[0].removeAttribute("id");
+                e.setAttribute("class", "my_like_btn_" + postId);
+                e.setAttribute("onclick", `like('${postId}', '${userId}')`);
+            });
+
             //window.location.reload();
             //$("#loaderDiv").hide();
             //$("#post_Modal").modal("hide");
@@ -103,11 +105,39 @@ var sendCommentModal = function (postId, userId) {
                     console.log(index + ": " + $(this).text());
                 }
             });
-            $('textarea#commentData-' + post_Id).each(function () {
-                if ($(this).val() != undefined && $(this).val() != "" && $(this).val() != null) {
-                    $(this).val("");
-                }
-            });
+            var imgSrc;
+            if (postData.UserProfileImgSrc == null) {
+                imgSrc = postData.DefaultImgSrc;
+            }
+            else {
+                imgSrc = postData.UserProfileImgSrc;
+            }
+            var commentElement = [];
+            commentElement.push(
+                `<div class=\"ui comments\">
+                <div class=\"comment\">
+                <a href=\"/Account/MyProfile?id=${currUser_Id}\" class=\"avatar\">
+                <img class="iP" src="${imgSrc}">
+                </a>
+                <div class=\"content\">
+                <a href=\"/Account/MyProfile?id=${currUser_Id}\" class=\"author my_author\">
+                ${postData.UserFirstName} ${postData.UserLastName}
+                </a>
+                <div class=\"metadata\">
+                <div class=\"date\">comment</div>
+                </div>
+                <div class=\"text\">
+                ${postData.CommentContent}
+                </div>
+                </div>
+                </div>
+                </div>`
+            );
+            console.log(commentElement);
+            //$(commentElement).insertBefore("#post_comment_section").slideDown();
+            //$.each(commentElement, function (index, value) {
+            $('#post_comment_section_' + postData.PostId).before(commentElement);
+            
             //window.location.reload();
             //$("#loaderDiv").hide();
         }
@@ -159,6 +189,38 @@ var sendComment = function (postId, userId) {
                     $(this).val("");
                 }
             });
+            var imgSrc;
+            if (postData.UserProfileImgSrc == null) {
+                imgSrc = postData.DefaultImgSrc;
+            }
+            else {
+                imgSrc = postData.UserProfileImgSrc;
+            }
+            var commentElement = [];
+            commentElement.push(
+                `<div class=\"ui comments\">
+                <div class=\"comment\">
+                <a href=\"/Account/MyProfile?id=${currUser_Id}\" class=\"avatar\">
+                <img class="iP" src="${imgSrc}">
+                </a>
+                <div class=\"content\">
+                <a href=\"/Account/MyProfile?id=${currUser_Id}\" class=\"author my_author\">
+                ${postData.UserFirstName} ${postData.UserLastName}
+                </a>
+                <div class=\"metadata\">
+                <div class=\"date\">comment</div>
+                </div>
+                <div class=\"text\">
+                ${postData.CommentContent}
+                </div>
+                </div>
+                </div>
+                </div>`
+            );
+            console.log(commentElement);
+            //$(commentElement).insertBefore("#post_comment_section").slideDown();
+            //$.each(commentElement, function (index, value) {
+            $('#post_comment_section_' + postData.PostId).before(commentElement);
             //window.location.reload();
             //$("#loaderDiv").hide();
         },

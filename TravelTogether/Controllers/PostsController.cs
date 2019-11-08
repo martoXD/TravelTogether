@@ -99,19 +99,23 @@ namespace TravelTogether.Controllers
                 }
             }
             var userProfileImgSrc = user.ProfileImageSrc;
+            var defaultImgSrc = user.DefaultImageSrc;
             var userFirstName = user.FirstName;
             var userLastName = user.LastName;
             var commentContent = comment.CommentContent;
             var postCommentsNum = post.Comments.Count();
+            var postId = post.Id;
 
             var serializedPost = JsonConvert.SerializeObject(
                                  new
-                                 {
+                                 {                                  
                                      UserProfileImgSrc = userProfileImgSrc,
+                                     DefaultImgSrc = defaultImgSrc,
                                      UserFirstName = userFirstName,
                                      UserLastName = userLastName,
                                      CommentContent = commentContent,
-                                     PostCommentsNum = postCommentsNum
+                                     PostCommentsNum = postCommentsNum,
+                                     PostId = postId
                                  },
                                  Formatting.Indented,
                                  new JsonSerializerSettings

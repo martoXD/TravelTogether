@@ -50,3 +50,4 @@ C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\bin\Debu
 C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\bin\Debug\netcoreapp2.1\wwwroot\js\profile.js
 C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\bin\Debug\netcoreapp2.1\wwwroot\js\register.js
 C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\bin\Debug\netcoreapp2.1\wwwroot\js\site.js
+C:\Users\miangelov\Desktop\TravelTogether\TravelTogether\TravelTogether\obj\Debug\netcoreapp2.1\TravelTogether.csprojAssemblyReference.cache

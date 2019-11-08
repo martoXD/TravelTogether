@@ -76,7 +76,7 @@
                                         && l.TtUserId == currentUser.Id).Id;
                                         <a class="my_dislike_btn_@post.Id"
                                            onclick="dislike('@post.Id', '@currentUser.Id', '@likeId')">
-                                            <i class="heart outline like icon"></i>
+                                            <i id="like_icon" class="heart outline like icon"></i>
                                         </a>
                                     }
                                 }
@@ -152,7 +152,7 @@
                                                     var likeId = post.Likes
                                                         .FirstOrDefault(l => l.PostId == post.Id
                                                         && l.TtUserId == currentUser.Id).Id;
-                                                    <a class="my_dislike_btn_@post.Id"
+                                                    <a id="like_icon" class="my_dislike_btn_@post.Id"
                                                        onclick="dislike(@post.Id, '@currentUser.Id', @likeId)">
                                                         <i class="heart outline like icon"></i>
                                                     </a>
@@ -229,7 +229,7 @@
                                         }
                                         @if (isAuthenthicated.HasValue && isAuthenthicated.Value)
                                         {
-                                            <div class="form-group my_form-group_modal">
+                                            <div id="post_comment_section_@post.Id" class="form-group my_form-group_modal">
                                                 <textarea id="commentData-@post.Id" class="form-control" rows="3"
                                                           placeholder="Add Comment..."></textarea>
                                             </div>
