@@ -81,3 +81,9 @@ a.my_author:hover {
 #like_icon {
     color: #ff2733;
 }
+
+.my_extra_content {
+    height: 290px;
+    overflow: scroll;
+    overflow-x: hidden;
+}

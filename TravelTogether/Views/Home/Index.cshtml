@@ -170,7 +170,7 @@
                                         <i class="comment icon"></i>
                                         <span id="postID-@post.Id">@post.Comments.Count() comments</span>
                                     </div>
-                                    <div class="extra content">
+                                    <div id="my_extra_content_@post.Id" class="extra content my_extra_content">
                                         @foreach (var comment in post.Comments.OrderBy(c => c.Id))
                                         {
                                             <div class="ui comments">
